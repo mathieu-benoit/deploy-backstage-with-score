@@ -30,7 +30,7 @@
     "@backstage/plugin-kubernetes": "^0.12.1",
     "@backstage/plugin-org": "^0.6.33",
     "@backstage/plugin-permission-react": "^0.4.28",
-    "@backstage/plugin-scaffolder": "^1.27.1",
+    "@backstage/plugin-scaffolder": "^1.27.5",
     "@backstage/plugin-search": "^1.4.20",
     "@backstage/plugin-search-react": "^1.8.3",
     "@backstage/plugin-techdocs": "^1.11.2",
