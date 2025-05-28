@@ -4,8 +4,8 @@ permissions:
 on:
   pull_request:
     branches: [main]
-  #push:
-  #  branches: [main]
+  push:
+    branches: [main]
 jobs:
   containers:
     runs-on: ubuntu-latest
