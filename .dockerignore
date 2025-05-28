@@ -1,6 +1,3 @@
-.git
-.yarn/cache
-.yarn/install-state.gz
 dist-types
 node_modules
 packages/*/dist
