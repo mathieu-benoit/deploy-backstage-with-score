@@ -20,9 +20,9 @@ CONTAINER_IMAGE = ${WORKLOAD_NAME}:test
 		--no-sample
 
 compose.yaml: score.yaml .score-compose/state.yaml Makefile
-	mkdir -p credentials && touch credentials/github-app-backstage-humanitec-credentials.yaml
 	score-compose generate score.yaml \
-		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}'
+		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}' \
+		--publish 7007:${CONTAINER_NAME}:7007
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -33,7 +33,7 @@ compose-up: compose.yaml
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	curl $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}:8080')
+	curl http://localhost:7007
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down

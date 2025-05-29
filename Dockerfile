@@ -111,4 +111,4 @@ ENV NODE_ENV=production
 # This disables node snapshot for Node 20 to work with the Scaffolder
 ENV NODE_OPTIONS="--no-node-snapshot"
 
-CMD ["node", "packages/backend", "--config", "app-config.yaml"]
+CMD ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
