@@ -13,7 +13,7 @@ help:
 
 WORKLOAD_NAME = backstage
 CONTAINER_NAME = backstage
-CONTAINER_IMAGE = ${WORKLOAD_NAME}:test
+CONTAINER_IMAGE = ${WORKLOAD_NAME}:local
 
 .score-compose/state.yaml:
 	score-compose init \

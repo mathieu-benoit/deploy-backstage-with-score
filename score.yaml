@@ -3,30 +3,13 @@ metadata:
   name: backstage
 containers:
   backstage:
-    command:
-      - "node"
-    args:
-      - packages/backend
-      - "--config"
-      - app-config.yaml
-      - "--config"
-      - app-config.production.yaml
     image: .
     variables:
-      APP_CONFIG_app_baseUrl: https://${resources.dns.host}
-      APP_CONFIG_backend_baseUrl: https://${resources.dns.host}
-      APP_CONFIG_backend_cors_origin: https://${resources.dns.host}
+      APP_CONFIG_backend_database_client: "better-sqlite3"
+      APP_CONFIG_backend_database_connection: ":memory:"
+      APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
 service:
   ports:
-    backstage:
+    tcp:
       port: 7007
       targetPort: 7007
-resources:
-  dns:
-    type: dns
-  route:
-    type: route
-    params:
-      host: ${resources.dns.host}
-      path: /
-      port: 7007
