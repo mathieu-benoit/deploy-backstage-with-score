@@ -14,19 +14,52 @@ yarn start
 ## Local with `score-compose`
 
 ```bash
-make compose-up
+score-compose init \
+    --no-sample
+```
+
+### By building a new container image
+
+```bash
+score-compose generate score.yaml \
+    --build 'backstage={"context":".","tags":["backstage:local"]}' \
+    --publish 7007:backstage:7007
+```
+
+### By using the pre-built container image
+
+```bash
+score-compose generate score.yaml \
+    --image ghcr.io/mathieu-benoit/backstage:latest \
+    --publish 7007:backstage:7007
+```
+
+```bash
+docker compose up -d
 ```
 
 Then navigate to http://localhost:7007.
 
 ## Local with `score-k8s`
 
+### By using the locally built container image
+
 ```bash
 kind load docker-image backstage:local
 
-make k8s-up
+score-k8s generate score.yaml \
+    --image backstage:local
+```
 
-kubectl port-forward --namespace=backstage svc/backstage 7007:7007
+### By using the pre-built container image
+
+```bash
+score-k8s generate score.yaml \
+    --image ghcr.io/mathieu-benoit/backstage:latest
+```
+
+```bash
+kubectl port-forward svc/backstage 7007:7007
 ```
 
 Then navigate to http://localhost:7007.
