@@ -11,11 +11,14 @@ yarn install
 yarn start
 ```
 
+Then navigate to http://localhost:3000.
+
 ## Local with `score-compose`
 
 ```bash
 score-compose init \
-    --no-sample
+    --no-sample \
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl
 ```
 
 ### By building a new container image
@@ -42,6 +45,12 @@ Then navigate to http://localhost:7007.
 
 ## Local with `score-k8s`
 
+```bash
+score-k8s init \
+    --no-sample \
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl
+```
+
 ### By using the locally built container image
 
 ```bash
@@ -59,6 +68,8 @@ score-k8s generate score.yaml \
 ```
 
 ```bash
+kubectl apply -f manifests.yaml
+
 kubectl port-forward svc/backstage 7007:7007
 ```
 
