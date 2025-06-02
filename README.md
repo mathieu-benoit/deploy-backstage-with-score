@@ -18,23 +18,22 @@ Then navigate to http://localhost:3000.
 ```bash
 score-compose init \
     --no-sample \
-    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 ```
 
 ### By building a new container image
 
 ```bash
 score-compose generate score.yaml \
-    --build 'backstage={"context":".","tags":["backstage:local"]}' \
-    --publish 7007:backstage:7007
+    --build 'backstage={"context":".","tags":["backstage:local"]}'
 ```
 
 ### By using the pre-built container image
 
 ```bash
 score-compose generate score.yaml \
-    --image ghcr.io/mathieu-benoit/backstage:latest \
-    --publish 7007:backstage:7007
+    --image ghcr.io/mathieu-benoit/backstage:latest
 ```
 
 ```bash
@@ -48,7 +47,8 @@ Then navigate to http://localhost:7007.
 ```bash
 score-k8s init \
     --no-sample \
-    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
+    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
 ```
 
 ### By using the locally built container image
@@ -69,8 +69,6 @@ score-k8s generate score.yaml \
 
 ```bash
 kubectl apply -f manifests.yaml
-
-kubectl port-forward svc/backstage 7007:7007
 ```
 
 Then navigate to http://localhost:7007.
