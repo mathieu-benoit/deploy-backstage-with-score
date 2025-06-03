@@ -24,7 +24,7 @@ CONTAINER_IMAGE = ${WORKLOAD_NAME}:local
 compose.yaml: score.yaml .score-compose/state.yaml Makefile
 	score-compose generate score.yaml \
 		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}' \
-		-override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -51,7 +51,7 @@ compose-down:
 manifests.yaml: score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate score.yaml \
 		--image ${CONTAINER_IMAGE} \
-		-override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
+		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
