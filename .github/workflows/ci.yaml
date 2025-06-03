@@ -18,20 +18,20 @@ jobs:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make compose-up
+      - name: make compose-test
         run: |
-          make compose-up
+          make compose-test
       - name: install score-k8s
         uses: score-spec/setup-score@v3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-up
+      - name: make k8s-test
         run: |
           make kind-create-cluster
           make kind-load-image
-          make k8s-up
+          make k8s-test
 
   validate-score:
     runs-on: ubuntu-latest
