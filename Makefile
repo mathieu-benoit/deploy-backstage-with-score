@@ -23,7 +23,8 @@ CONTAINER_IMAGE = ${WORKLOAD_NAME}:local
 
 compose.yaml: score.yaml .score-compose/state.yaml Makefile
 	score-compose generate score.yaml \
-		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}'
+		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}' \
+		-override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -34,7 +35,7 @@ compose-up: compose.yaml
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	curl $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}')
+	curl $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}') | grep "<title>Hello, Compose!</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -49,7 +50,8 @@ compose-down:
 
 manifests.yaml: score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate score.yaml \
-		--image ${CONTAINER_IMAGE}
+		--image ${CONTAINER_IMAGE} \
+		-override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
@@ -81,7 +83,7 @@ k8s-up: manifests.yaml
 ## Expose the container deployed in Kubernetes via port-forward.
 .PHONY: k8s-test
 k8s-test: k8s-up
-	curl $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}')
+	curl $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}') | grep "<title>Hello, Kubernetes!</title>"
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
