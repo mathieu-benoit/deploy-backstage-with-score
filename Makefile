@@ -35,8 +35,8 @@ compose-up: compose.yaml
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
 	docker ps --all
+	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -86,14 +86,14 @@ k8s-up: manifests.yaml
 .PHONY: k8s-test
 k8s-test: k8s-up
 	sleep 5
-	curl -v localhost:80 \
-		-H "Host: $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" \
-		| grep "<title>Hello, Kubernetes!</title>"
 	kubectl get all,httproute \
 		-n ${NAMESPACE}
 	kubectl logs \
 		-l app.kubernetes.io/name=${WORKLOAD_NAME} \
 		-n ${NAMESPACE}
+	curl -v localhost:80 \
+		-H "Host: $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" \
+		| grep "<title>Hello, Kubernetes!</title>"
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
