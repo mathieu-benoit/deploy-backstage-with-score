@@ -23,7 +23,8 @@ CONTAINER_IMAGE = ${WORKLOAD_NAME}:local
 
 compose.yaml: score.yaml .score-compose/state.yaml Makefile
 	score-compose generate score.yaml \
-		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}'
+		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}' \
+		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -34,7 +35,8 @@ compose-up: compose.yaml
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	curl $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}')
+	docker ps --all
+	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -49,7 +51,8 @@ compose-down:
 
 manifests.yaml: score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate score.yaml \
-		--image ${CONTAINER_IMAGE}
+		--image ${CONTAINER_IMAGE} \
+		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
@@ -74,14 +77,23 @@ k8s-up: manifests.yaml
 		--timeout=90s
 	kubectl wait pods \
 		-n ${NAMESPACE} \
-		-l app.kubernetes.io/name=${WORKLOAD_NAME} \
+		-l app.kubernetes.io/managed-by=score-k8s \
 		--for condition=Ready \
 		--timeout=90s
+	sleep 5
 
 ## Expose the container deployed in Kubernetes via port-forward.
 .PHONY: k8s-test
 k8s-test: k8s-up
-	curl $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .url }}')
+	sleep 5
+	kubectl get all,httproute \
+		-n ${NAMESPACE}
+	kubectl logs \
+		-l app.kubernetes.io/name=${WORKLOAD_NAME} \
+		-n ${NAMESPACE}
+	curl -v localhost:80 \
+		-H "Host: $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" \
+		| grep "<title>Hello, Kubernetes!</title>"
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
