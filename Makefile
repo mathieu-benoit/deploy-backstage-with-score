@@ -77,7 +77,7 @@ k8s-up: manifests.yaml
 		--timeout=90s
 	kubectl wait pods \
 		-n ${NAMESPACE} \
-		-l app.kubernetes.io/name=${WORKLOAD_NAME} \
+		-l app.kubernetes.io/managed-by=score-k8s \
 		--for condition=Ready \
 		--timeout=90s
 	sleep 5
