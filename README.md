@@ -1,8 +1,8 @@
 # [Backstage](https://backstage.io)
 
-This is your newly scaffolded Backstage App, Good Luck!
+This Backstage application is used as part of this blog post [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
 
-## Local
+## Local with `yarn`
 
 To start the app, run:
 
@@ -12,6 +12,32 @@ yarn start
 ```
 
 Then navigate to http://localhost:3000.
+
+## Local with `docker`/`podman`
+
+### By building a new container image
+
+```sh
+docker image build -t backstage:local .
+
+docker run -it \
+    -e APP_CONFIG_backend_database_client='better-sqlite3' \
+    -e APP_CONFIG_backend_database_connection=':memory:' \
+    -p 7007:7007 \
+    backstage:local
+```
+
+### By using the pre-built container image
+
+```sh
+docker run -it \
+    -e APP_CONFIG_backend_database_client='better-sqlite3' \
+    -e APP_CONFIG_backend_database_connection=':memory:' \
+    -p 7007:7007 \
+    docker pull ghcr.io/mathieu-benoit/backstage:latest
+```
+
+Then navigate to http://localhost:7007.
 
 ## Local with `score-compose`
 
