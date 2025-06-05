@@ -16,16 +16,8 @@ updates:
       ci:
         patterns:
           - "*"
-  - package-ecosystem: "npm"
-    directory: "packages/app"
-    schedule:
-      interval: "weekly"
-    groups:
-      ci:
-        patterns:
-          - "*"
-  - package-ecosystem: "npm"
-    directory: "packages/backend"
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
       interval: "weekly"
     groups:
