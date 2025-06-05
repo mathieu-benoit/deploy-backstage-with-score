@@ -42,7 +42,7 @@
     "@backstage/plugin-techdocs-backend": "^2.0.2",
     "app": "link:../app",
     "better-sqlite3": "^11.10.0",
-    "node-gyp": "^10.0.0",
+    "node-gyp": "^10.3.1",
     "pg": "^8.11.3"
   },
   "devDependencies": {

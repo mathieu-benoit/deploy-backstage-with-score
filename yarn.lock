@@ -14246,7 +14246,7 @@ __metadata:
     "@backstage/plugin-techdocs-backend": "npm:^2.0.2"
     app: "link:../app"
     better-sqlite3: "npm:^11.10.0"
-    node-gyp: "npm:^10.0.0"
+    node-gyp: "npm:^10.3.1"
     pg: "npm:^8.11.3"
   languageName: unknown
   linkType: soft
@@ -24570,7 +24570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:^10.0.0":
+"node-gyp@npm:^10.3.1":
   version: 10.3.1
   resolution: "node-gyp@npm:10.3.1"
   dependencies:
@@ -28226,7 +28226,7 @@ __metadata:
     "@backstage/cli": "npm:^0.32.1"
     "@backstage/e2e-test-utils": "npm:^0.1.1"
     "@playwright/test": "npm:^1.32.3"
-    node-gyp: "npm:^10.0.0"
+    node-gyp: "npm:^10.3.1"
     prettier: "npm:^2.8.8"
     typescript: "npm:~5.8.0"
   languageName: unknown
