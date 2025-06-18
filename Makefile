@@ -25,10 +25,10 @@ FRONTEND_CONTAINER_IMAGE = ${FRONTEND_WORKLOAD_NAME}:local
 
 compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml Makefile
 	score-compose generate score-backend.yaml \
-		--build '${BACKEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile","tags":["${BACKEND_CONTAINER_NAME}"]}' \
+		--build '${BACKEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile","tags":["${BACKEND_CONTAINER_IMAGE}"]}' \
 		--override-property containers.${BACKEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 	score-compose generate score-frontend.yaml \
-		--build '${FRONTEND_WORKLOAD_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_WORKLOAD_NAME}"]}' \
+		--build '${FRONTEND_WORKLOAD_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_CONTAINER_IMAGE}"]}' \
 		--override-property containers.${FRONTEND_WORKLOAD_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 
 ## Generate a compose.yaml file from the score spec and launch it.
