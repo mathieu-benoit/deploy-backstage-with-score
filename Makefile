@@ -11,20 +11,25 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
-WORKLOAD_NAME = backstage
-CONTAINER_NAME = backstage
-CONTAINER_IMAGE = ${WORKLOAD_NAME}:local
+BACKEND_WORKLOAD_NAME = backend
+BACKEND_CONTAINER_NAME = backend
+BACKEND_CONTAINER_IMAGE = ${BACKEND_WORKLOAD_NAME}:local
+FRONTEND_WORKLOAD_NAME = frontend
+FRONTEND_CONTAINER_NAME = frontend
+FRONTEND_CONTAINER_IMAGE = ${FRONTEND_WORKLOAD_NAME}:local
 
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 
-compose.yaml: score.yaml .score-compose/state.yaml Makefile
-	score-compose generate score.yaml \
-		--build '${CONTAINER_NAME}={"context":".","tags":["${CONTAINER_IMAGE}"]}' \
-		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml Makefile
+	score-compose generate score-backend.yaml \
+		--build '${BACKEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile","tags":["${BACKEND_CONTAINER_NAME}"]}' \
+		--override-property containers.${BACKEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+	score-compose generate score-frontend.yaml \
+		--build '${FRONTEND_WORKLOAD_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_WORKLOAD_NAME}"]}' \
+		--override-property containers.${FRONTEND_WORKLOAD_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -36,7 +41,7 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	docker ps --all
-	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
+	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -46,7 +51,6 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
-		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
 
 manifests.yaml: score.yaml .score-k8s/state.yaml Makefile

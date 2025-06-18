@@ -1,0 +1,26 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: frontend
+containers:
+  frontend:
+    image: .
+    variables:
+      APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
+      APP_CONFIG_app_baseUrl: ${resources.dns.url}
+      APP_CONFIG_backend_baseUrl: ${resources.dns.url}
+      APP_CONFIG_backend_cors_origin: ${resources.dns.url}
+service:
+  ports:
+    tcp:
+      port: 3000
+      targetPort: 3000
+resources:
+  dns:
+    type: dns
+    id: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 3000
