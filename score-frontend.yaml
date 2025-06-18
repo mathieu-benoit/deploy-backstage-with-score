@@ -13,7 +13,7 @@ service:
   ports:
     tcp:
       port: 3000
-      targetPort: 3000
+      targetPort: 80
 resources:
   dns:
     type: dns
