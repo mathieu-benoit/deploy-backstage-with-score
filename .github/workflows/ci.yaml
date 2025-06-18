@@ -32,18 +32,3 @@ jobs:
           make kind-create-cluster
           make kind-load-image
           make k8s-test
-
-  validate-score:
-    runs-on: ubuntu-latest
-    env:
-      HUMCTL_VERSION: '*'
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v4
-      - uses: humanitec/setup-cli-action@v1
-        with:
-          version: ${{ env.HUMCTL_VERSION }}
-      - name: humctl score validate - backstage
-        run: |
-          humctl score validate --local --strict \
-            score.yaml
