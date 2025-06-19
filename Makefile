@@ -38,7 +38,7 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	docker ps --all
-	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" | grep "<title>Hello, Compose!</title>"
+	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" | grep "<title>Scaffolded Backstage App</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
