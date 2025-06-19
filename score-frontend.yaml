@@ -1,0 +1,32 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: frontend
+containers:
+  frontend:
+    image: .
+    variables:
+      APP_CONFIG_app_baseUrl: ${resources.dns.url}
+      APP_CONFIG_backend_baseUrl: ${resources.dns.url}
+    livenessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 8080
+    readinessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 8080
+service:
+  ports:
+    tcp:
+      port: 3000
+      targetPort: 8080
+resources:
+  dns:
+    type: dns
+    id: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 3000
