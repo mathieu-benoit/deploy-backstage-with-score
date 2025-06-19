@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
 jobs:
-  containers:
+  monolith:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -18,17 +18,45 @@ jobs:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make compose-test
+      - name: make monolith-compose-test
         run: |
-          make compose-test
+          make monolith-compose-test
       - name: install score-k8s
         uses: score-spec/setup-score@v3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-test
+      - name: make monolith-k8s-test
         run: |
           make kind-create-cluster
-          make kind-load-image
-          make k8s-test
+          make monolith-kind-load-image
+          make monolith-k8s-test
+  frontent-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: remove frontend from backend
+        run: |
+          make remove-frontend-from-backend
+      - name: install score-compose
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-compose
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make split-compose-test
+        run: |
+          make split-compose-test
+      - name: install score-k8s
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-k8s
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make split-k8s-test
+        run: |
+          make kind-create-cluster
+          make split-kind-load-image
+          make split-k8s-test

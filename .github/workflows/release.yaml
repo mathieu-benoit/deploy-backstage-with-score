@@ -9,7 +9,9 @@ on:
       - 'v*'
 env:
   IMAGE_TAG: ${{ github.ref_name }}
-  IMAGE_NAME: backstage
+  MONOLITH_IMAGE_NAME: backstage
+  FRONTEND_IMAGE_NAME: backstage-frontend
+  BACKEND_IMAGE_NAME: backstage-backend
 jobs:
   build-push:
     runs-on: ubuntu-24.04
@@ -26,10 +28,28 @@ jobs:
               ghcr.io \
               -u $ \
               --password-stdin
-      - name: Build and push
+      - name: build and push monolith container image
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest"
+          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:latest"
+      - name: build and push frontend container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:latest"
+      - name: remove frontend from backend
+        run: |
+          make cleanup-compose
+          make remove-frontend-from-backend
+      - name: build and push backend container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:latest"
