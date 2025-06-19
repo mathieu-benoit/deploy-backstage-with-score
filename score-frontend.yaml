@@ -10,11 +10,11 @@ containers:
     livenessProbe:
       httpGet:
         path: /healthcheck
-        port: 3000
+        port: 8080
     readinessProbe:
       httpGet:
         path: /healthcheck
-        port: 3000
+        port: 8080
 service:
   ports:
     tcp:
