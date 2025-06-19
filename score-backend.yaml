@@ -18,9 +18,15 @@ containers:
       POSTGRES_PORT: ${resources.pg.port}
       POSTGRES_USER: ${resources.pg.username}
       APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
-      APP_CONFIG_app_baseUrl: ${resources.dns.url}
-      APP_CONFIG_backend_baseUrl: ${resources.dns.url}
       APP_CONFIG_backend_cors_origin: ${resources.dns.url}
+    livenessProbe:
+      httpGet:
+        path: /.backstage/health/v1/liveness
+        port: 7007
+    readinessProbe:
+      httpGet:
+        path: /.backstage/health/v1/readiness
+        port: 7007
 service:
   ports:
     tcp:

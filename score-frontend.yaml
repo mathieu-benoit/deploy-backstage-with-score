@@ -5,10 +5,16 @@ containers:
   frontend:
     image: .
     variables:
-      APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
       APP_CONFIG_app_baseUrl: ${resources.dns.url}
       APP_CONFIG_backend_baseUrl: ${resources.dns.url}
-      APP_CONFIG_backend_cors_origin: ${resources.dns.url}
+    livenessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 3000
+    readinessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 3000
 service:
   ports:
     tcp:
