@@ -40,7 +40,7 @@
     "@backstage/plugin-techdocs-backend": "^2.0.3",
     "better-sqlite3": "^11.10.0",
     "node-gyp": "^11.2.0",
-    "pg": "^8.11.3"
+    "pg": "^8.16.1"
   },
   "devDependencies": {
     "@backstage/cli": "^0.33.0"
