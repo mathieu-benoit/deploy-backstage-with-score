@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -Eeuo pipefail
 
@@ -26,7 +26,7 @@ function inject_config() {
   config_escaped_1="$(echo "$config" | jq -cM . | sed -e 's/[\\"'\'']/\\&/g')"
   # escape / and & for sed
   local config_escaped_2
-  config_escaped_2="$(echo "$config_escaped_1" | sed -e 's/[\/&]/\\&/g')"
+  config_escaped_2="$(echo "$config_escaped_1" | sed -e 's/[\\/&]/\\&/g')"
 
   # Replace __APP_INJECTED_RUNTIME_CONFIG__ in the main chunk with the runtime config
   sed -e "s/__APP_INJECTED_RUNTIME_CONFIG__/$config_escaped_2/" -i "$main_js"

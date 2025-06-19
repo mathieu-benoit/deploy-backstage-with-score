@@ -6,8 +6,8 @@ RUN yarn install
 RUN yarn workspace app build
 
 
-FROM nginx:mainline
-RUN apt-get update && apt-get -y install jq && rm -rf /var/lib/apt/lists/*
+FROM nginx:alpine
+RUN apk update && apk add jq && rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
 COPY container-config/default.conf.template /etc/nginx/templates/default.conf.template
 COPY container-config/inject-config.sh /docker-entrypoint.d/40-inject-config.sh
