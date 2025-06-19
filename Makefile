@@ -11,8 +11,10 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
+BACKEND_WORKLOAD_NAME = backend
 BACKEND_CONTAINER_NAME = backend
 BACKEND_CONTAINER_IMAGE = ${BACKEND_CONTAINER_NAME}:local
+FRONTEND_WORKLOAD_NAME = frontend
 FRONTEND_CONTAINER_NAME = frontend
 FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 
@@ -38,7 +40,9 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	docker ps --all
-	curl -v localhost:8080 -H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" | grep "<title>Scaffolded Backstage App</title>"
+	curl -v localhost:8080 \
+		-H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" \
+		| grep "<title>Scaffolded Backstage App</title>"
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -50,10 +54,12 @@ compose-down:
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
 
-manifests.yaml: score.yaml .score-k8s/state.yaml Makefile
-	score-k8s generate score.yaml \
-		--image ${CONTAINER_IMAGE} \
-		--override-property containers.${CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
+manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Makefile
+	score-k8s generate score-backend.yaml \
+		--image ${BACKEND_CONTAINER_IMAGE}
+	score-k8s generate score-frontend.yaml \
+		--image ${FRONTEND_CONTAINER_IMAGE} \
+		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
@@ -63,7 +69,8 @@ kind-create-cluster:
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
 kind-load-image:
-	kind load docker-image ${CONTAINER_IMAGE}
+	kind load docker-image ${BACKEND_CONTAINER_IMAGE}
+	kind load docker-image ${FRONTEND_CONTAINER_IMAGE}
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
@@ -72,7 +79,11 @@ k8s-up: manifests.yaml
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
-	kubectl wait deployments/${WORKLOAD_NAME} \
+	kubectl wait deployments/${BACKEND_WORKLOAD_NAME} \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait deployments/${FRONTEND_WORKLOAD_NAME} \
 		-n ${NAMESPACE} \
 		--for condition=Available \
 		--timeout=90s
@@ -90,11 +101,14 @@ k8s-test: k8s-up
 	kubectl get all,httproute \
 		-n ${NAMESPACE}
 	kubectl logs \
-		-l app.kubernetes.io/name=${WORKLOAD_NAME} \
+		-l app.kubernetes.io/name=${BACKEND_WORKLOAD_NAME} \
+		-n ${NAMESPACE}
+	kubectl logs \
+		-l app.kubernetes.io/name=${FRONTEND_WORKLOAD_NAME} \
 		-n ${NAMESPACE}
 	curl -v localhost:80 \
-		-H "Host: $$(score-k8s resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}')" \
-		| grep "<title>Hello, Kubernetes!</title>"
+		-H "Host: $$(score-k8s resources get-outputs dns.default#dns --format '{{ .host }}')" \
+		| grep "<title>Scaffolded Backstage App</title>"
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
