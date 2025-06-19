@@ -60,9 +60,9 @@ cleanup-compose: compose-down
 kind-create-cluster:
 	./scripts/setup-kind-cluster.sh
 
-## Load the local container image in the current Kind cluster.
-.PHONY: kind-load-image
-kind-load-image:
+## Load the local container images in the current Kind cluster.
+.PHONY: kind-load-images
+kind-load-images:
 	kind load docker-image ${BACKEND_CONTAINER_IMAGE}
 	kind load docker-image ${FRONTEND_CONTAINER_IMAGE}
 
