@@ -17,7 +17,7 @@ MONOLITH_CONTAINER_IMAGE = ${MONOLITH_CONTAINER_NAME}:local
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: monolith-compose-up
-monolith-compose-up: score.yaml .score-compose/state.yaml Makefile
+monolith-compose-up: score.yaml Makefile
 	score-compose init \
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
@@ -58,7 +58,7 @@ remove-frontend-from-backend:
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: split-compose-up
-split-compose-up: score-backend.yaml score-frontend.yaml .score-compose/state.yaml Makefile
+split-compose-up: score-backend.yaml score-frontend.yaml Makefile
 	score-compose init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
@@ -102,7 +102,7 @@ split-kind-load-image:
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
 .PHONY: monolith-k8s-up
-monolith-k8s-up: score.yaml .score-k8s/state.yaml Makefile
+monolith-k8s-up: score.yaml Makefile
 	score-k8s init \
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
@@ -126,7 +126,7 @@ monolith-k8s-up: score.yaml .score-k8s/state.yaml Makefile
 
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
 .PHONY: split-k8s-up
-split-k8s-up: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Makefile
+split-k8s-up: score-backend.yaml score-frontend.yaml Makefile
 	score-k8s init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
