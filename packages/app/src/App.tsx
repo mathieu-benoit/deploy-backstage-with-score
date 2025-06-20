@@ -39,6 +39,8 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomepageCompositionRoot, VisitListener } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
 
+import { TechRadarPage } from '@backstage-community/plugin-tech-radar';
+
 const app = createApp({
   apis,
   bindRoutes({ bind }) {
@@ -99,6 +101,10 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route
+      path="/tech-radar"
+      element={<TechRadarPage />}
+    />
   </FlatRoutes>
 );
 
