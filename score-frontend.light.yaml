@@ -1,0 +1,14 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: frontend
+containers:
+  frontend:
+    image: .
+    variables:
+      APP_CONFIG_app_baseUrl: http://localhost:3000
+      APP_CONFIG_backend_baseUrl: http://localhost:7007
+service:
+  ports:
+    tcp:
+      port: 3000
+      targetPort: 8080
