@@ -1,0 +1,24 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: backend
+containers:
+  backend:
+    image: .
+    command:
+      - "node"
+    args:
+      - packages/backend
+      - "--config"
+      - app-config.yaml
+      - "--config"
+      - app-config.production.yaml
+    variables:
+      APP_CONFIG_backend_database_client: "better-sqlite3"
+      APP_CONFIG_backend_database_connection: ":memory:"
+      APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
+      APP_CONFIG_backend_cors_origin: http://localhost:3000
+service:
+  ports:
+    tcp:
+      port: 7007
+      targetPort: 7007
