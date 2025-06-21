@@ -18,7 +18,9 @@ FRONTEND_WORKLOAD_NAME = frontend
 FRONTEND_CONTAINER_NAME = frontend
 FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 
-run-light:
+## Build new backend:local and frontent:local container images and run them with light Score files.
+.PHONY: build-and-run-light
+build-and-run-light:
 	score-compose init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
@@ -30,6 +32,21 @@ run-light:
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
 	docker compose up --build -d --remove-orphans
+
+## Run both backend:local and frontent:local container images with light Score files.
+.PHONY: run-light
+run-light:
+	score-compose init \
+		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
+	score-compose generate score-backend.light.yaml \
+    	--image ackend:local
+	score-compose generate score-frontend.light.yaml \
+		--image frontend:local \
+		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
+		--publish 7007:backend:7007 \
+		--publish 3000:frontend:8080
+	docker compose up -d --remove-orphans
 
 .score-compose/state.yaml:
 	score-compose init \

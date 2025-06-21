@@ -37,18 +37,21 @@ catalog:
   # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
   # on how to get entities into the catalog.
   locations:
-    # Local example data, replace this with your production config, these are intended for demo use only.
-    # File locations are relative to the backend process, typically in a deployed context, such as in a Docker container, this will be the root
-    - type: file
-      target: ./examples/entities.yaml
+    # Default Catalog
+    - type: url
+      target: https://github.com/mathieu-benoit/deploy-backstage-with-score/blob/main/catalog-info.yaml
+    - type: url
+      target: https://github.com/Humanitec-DemoOrg/onlineboutique-demo/blob/main/catalog-info.yaml
+    - type: url
+      target: https://github.com/mathieu-benoit/sail-sharp/blob/main/catalog-info.yaml
 
-    # Local example template
+    # Template
     - type: file
       target: ./examples/template/template.yaml
       rules:
         - allow: [Template]
 
-    # Local example organizational data
+    # Organizational data
     - type: file
       target: ./examples/org.yaml
       rules:
