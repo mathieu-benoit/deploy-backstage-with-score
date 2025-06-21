@@ -36,7 +36,7 @@ spec:
   system: backstage
   dependsOn:
   - 'resource:dns'
-  - 'component:postres'
+  - 'component:backend'
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -76,6 +76,6 @@ metadata:
   name: postres
   description: PostgreSQL
 spec:
-  type: postres
+  type: database
   owner: user:guest
   system: backstage
