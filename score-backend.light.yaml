@@ -17,6 +17,7 @@ containers:
       APP_CONFIG_backend_database_connection: ":memory:"
       APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
       APP_CONFIG_backend_cors_origin: http://localhost:3000
+      APP_CONFIG_techRadar_url: https://github.com/mathieu-benoit/humanitec-ref-arch/blob/main/tech-radar.json
 service:
   ports:
     tcp:
