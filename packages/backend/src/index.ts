@@ -51,4 +51,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
+// tech radar
+backend.add(import('@backstage-community/plugin-tech-radar-backend'));
+
 backend.start();

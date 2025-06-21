@@ -28,6 +28,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 import CategoryIcon from '@material-ui/icons/Category';
+import MapIcon from '@material-ui/icons/MyLocation';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -83,6 +84,8 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           {/* Items in this group will be scrollable if they run out of space */}
         </SidebarScrollWrapper>
       </SidebarGroup>
+      <SidebarDivider />
+      <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
       <SidebarSpace />
       <SidebarDivider />
       <SidebarGroup
