@@ -1,13 +1,81 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: System
 metadata:
   name: backstage
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  description: Backstage Project
+  annotations:
+    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+  links:
+    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+      title: Repository
+      icon: github
+spec:
+  owner: user:guest
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: frontend
+  description: Backstage Frontend
+  annotations:
+    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+  tags:
+    - nginx
+    - javascript
+    - html
+    - typescript
+    - css
+  links:
+    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+      title: Source code
+      icon: github
 spec:
   type: website
-  owner: john@example.com
   lifecycle: experimental
+  owner: user:guest
+  system: backstage
+  dependsOn:
+  - 'resource:dns'
+  - 'component:postres'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dns
+  description: DNS
+spec:
+  type: dns
+  owner: user:guest
+  system: backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backend
+  description: Backstage Backend
+  annotations:
+    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+  tags:
+    - javascript
+    - nodejs
+  links:
+    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+      title: Source code
+      icon: github
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user:guest
+  system: backstage
+  dependsOn:
+  - 'resource:postres'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: postres
+  description: PostgreSQL
+spec:
+  type: postres
+  owner: user:guest
+  system: backstage
