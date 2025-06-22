@@ -1,81 +1,88 @@
+---
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-  name: backstage
-  description: Backstage Project
-  annotations:
-    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
-  links:
-    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
-      title: Repository
-      icon: github
+    annotations:
+        github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+    description: backstage
+    links:
+        - icon: github
+          title: Repository
+          url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+    name: backstage
 spec:
-  owner: user:guest
+    owner: user:guest
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstage-frontend
-  description: Backstage Frontend
-  annotations:
-    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
-  tags:
-    - nginx
-    - javascript
-    - html
-    - typescript
-    - css
-  links:
-    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
-      title: Source code
-      icon: github
+    annotations:
+        github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+    description: backend
+    links:
+        - icon: github
+          title: Repository
+          url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+    name: backstage-backend
+    title: backend
 spec:
-  type: website
-  lifecycle: experimental
-  owner: user:guest
-  system: backstage
-  dependsOn:
-  - 'resource:backstage-frontend-dns'
-  - 'component:backstage-backend'
+    dependsOn:
+        - resource:backstage-backend-dns
+        - resource:backstage-backend-pg
+    lifecycle: experimental
+    owner: user:guest
+    system: backstage
+    type: service
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: backstage-frontend-dns
-  description: DNS
+    description: 'dns (type: dns) of backend'
+    name: backstage-backend-dns
+    title: dns
 spec:
-  type: dns
-  owner: user:guest
-  system: backstage
+    owner: user:guest
+    system: backstage
+    type: dns
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+    description: 'pg (type: postgres-instance) of backend'
+    name: backstage-backend-pg
+    title: pg
+spec:
+    owner: user:guest
+    system: backstage
+    type: postgres-instance
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstage-backend
-  description: Backstage Backend
-  annotations:
-    github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
-  tags:
-    - javascript
-    - nodejs
-  links:
-    - url: https://github.com/mathieu-benoit/deploy-backstage-with-score
-      title: Source code
-      icon: github
+    annotations:
+        github.com/project-slug: mathieu-benoit/deploy-backstage-with-score
+    description: frontend
+    links:
+        - icon: github
+          title: Repository
+          url: https://github.com/mathieu-benoit/deploy-backstage-with-score
+    name: backstage-frontend
+    title: frontend
 spec:
-  type: service
-  lifecycle: experimental
-  owner: user:guest
-  system: backstage
-  dependsOn:
-  - 'resource:backstage-backend-postgres'
+    dependsOn:
+        - resource:backstage-frontend-dns
+    lifecycle: experimental
+    owner: user:guest
+    system: backstage
+    type: service
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: backstage-backend-postgres
-  description: PostgreSQL
+    description: 'dns (type: dns) of frontend'
+    name: backstage-frontend-dns
+    title: dns
 spec:
-  type: database
-  owner: user:guest
-  system: backstage
+    owner: user:guest
+    system: backstage
+    type: dns
