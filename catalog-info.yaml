@@ -27,34 +27,12 @@ metadata:
     title: backend
 spec:
     dependsOn:
-        - resource:backstage-backend-dns
+        - resource:shared-dns
         - resource:backstage-backend-pg
     lifecycle: experimental
     owner: user:guest
     system: backstage
     type: service
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-    description: 'dns (type: dns) of backend'
-    name: backstage-backend-dns
-    title: dns
-spec:
-    owner: user:guest
-    system: backstage
-    type: dns
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-    description: 'pg (type: postgres-instance) of backend'
-    name: backstage-backend-pg
-    title: pg
-spec:
-    owner: user:guest
-    system: backstage
-    type: postgres-instance
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -70,7 +48,8 @@ metadata:
     title: frontend
 spec:
     dependsOn:
-        - resource:backstage-frontend-dns
+        - component:backstage-backend
+        - resource:shared-dns
     lifecycle: experimental
     owner: user:guest
     system: backstage
@@ -79,8 +58,30 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-    description: 'dns (type: dns) of frontend'
-    name: backstage-frontend-dns
+    description: backstage-backend-pg
+    name: backstage-backend-pg
+    title: pg
+spec:
+    owner: user:guest
+    system: backstage
+    type: postgres-instance
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+    description: backstage-frontend-backend
+    name: backstage-frontend-backend
+    title: backend
+spec:
+    owner: user:guest
+    system: backstage
+    type: service
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+    description: shared-dns
+    name: shared-dns
     title: dns
 spec:
     owner: user:guest

@@ -51,6 +51,7 @@ run-light:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 
 compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml Makefile
@@ -101,6 +102,7 @@ NAMESPACE ?= default
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
 
 manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Makefile
