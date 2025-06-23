@@ -69,17 +69,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-    description: backstage-frontend-backend
-    name: backstage-frontend-backend
-    title: backend
-spec:
-    owner: user:guest
-    system: backstage
-    type: service
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
     description: shared-dns
     name: shared-dns
     title: dns
