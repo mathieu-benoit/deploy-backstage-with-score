@@ -155,3 +155,22 @@ k8s-down:
 	kubectl delete \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
+
+## Generate catalog-info.yaml for Backstage.
+.PHONY: generate-catalog-info
+generate-catalog-info:
+	score-k8s init \
+		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
+  		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/backstage-catalog-entities.tpl
+	score-k8s generate score-backend.yaml \
+		--namespace backstage \
+		--image ghcr.io/mathieu-benoit/backstage-frontend:latest \
+		--output catalog-info.yaml
+	score-k8s generate score-frontend.yaml \
+  		--namespace backstage \
+ 		--generate-namespace \
+  		--image ghcr.io/mathieu-benoit/backstage-backend:latest \
+  		--output catalog-info.yaml
+	sed 's,$$GITHUB_REPO,mathieu-benoit/deploy-backstage-with-score,g' -i catalog-info.yaml
