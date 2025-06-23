@@ -1,6 +1,8 @@
 apiVersion: score.dev/v1b1
 metadata:
   name: frontend
+  annotations:
+    tags: "nginx,javascript,html,css"
 containers:
   frontend:
     image: .
