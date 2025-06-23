@@ -21,6 +21,8 @@ service:
       port: 3000
       targetPort: 8080
 resources:
+  backend:
+    type: service
   dns:
     type: dns
     id: dns
