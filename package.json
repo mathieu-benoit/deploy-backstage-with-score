@@ -31,9 +31,9 @@
   "devDependencies": {
     "@backstage/cli": "^0.33.0",
     "@backstage/e2e-test-utils": "^0.1.1",
-    "@playwright/test": "^1.53.1",
+    "@playwright/test": "^1.53.2",
     "node-gyp": "^11.2.0",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.8.0"
   },
   "resolutions": {
