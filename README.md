@@ -1,6 +1,6 @@
 This [Backstage](https://backstage.io) application is used as part of this blog post [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
 
-You can deploy this Backstage application in different ways (by building new container images or using the pre-built ones):
+You can deploy this Backstage application in different ways:
 - [With `yarn`](#with-yarn)
 - [With `docker`/`podman`](#with-dockerpodman)
 - [With `score-compose`](#with-score-compose)
@@ -22,14 +22,17 @@ Then navigate to http://localhost:3000.
 ### By building new container images
 
 ```sh
-docker image build -t backstage-frontend:local .
+docker image build -f Dockerfile.frontend -t backstage-frontend:local .
+
 docker run -it \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
     backstage-frontend:local
 
-docker image build -f Dockerfile.frontend -t backstage-frontend:local .
+
+docker image build -t backstage-backend:local .
+
 docker run -it \
     -p 3000:8080 \
     backstage-backend:local
