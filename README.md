@@ -57,9 +57,7 @@ Then navigate to http://localhost:7007.
 ## With `score-compose`
 
 ```bash
-score-compose init \
-    --no-sample \
-    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
+score-compose init --no-sample
 ```
 
 ### By building a new container image
