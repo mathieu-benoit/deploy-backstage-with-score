@@ -22,8 +22,7 @@ FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 .PHONY: build-and-run-light
 build-and-run-light:
 	score-compose init \
-		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
+		--no-sample
 	score-compose generate score-backend.light.yaml \
     		--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
 	score-compose generate score-frontend.light.yaml \
@@ -37,8 +36,7 @@ build-and-run-light:
 .PHONY: run-light
 run-light:
 	score-compose init \
-		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
+		--no-sample
 	score-compose generate score-backend.light.yaml \
     		--image backend:local
 	score-compose generate score-frontend.light.yaml \
