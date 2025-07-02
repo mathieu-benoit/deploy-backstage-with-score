@@ -22,20 +22,20 @@ Then navigate to http://localhost:3000.
 ### By building new container images
 
 ```sh
-docker image build -f Dockerfile.frontend -t backstage-frontend:local .
+docker image build -t backstage-backend:local .
 
 docker run -it \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
-    backstage-frontend:local
+    backstage-backend:local
 
 
-docker image build -t backstage-backend:local .
+docker image build -f Dockerfile.frontend -t backstage-frontend:local .
 
 docker run -it \
     -p 3000:8080 \
-    backstage-backend:local
+    backstage-frontend:local
 ```
 
 ### By using the pre-built container image
@@ -74,11 +74,16 @@ score-compose generate score-frontend.light.yaml \
     --publish 3000:frontend:8080
 ```
 
+```bash
+docker compose up --build -d
+```
+
 ### By using the pre-built container image
 
 ```bash
 score-compose generate score-backend.light.yaml \
     --image ghcr.io/mathieu-benoit/backstage-backend:latest
+
 score-compose generate score-frontend.light.yaml \
     --image ghcr.io/mathieu-benoit/backstage-frontend:latest \
     --publish 7007:backend:7007 \
