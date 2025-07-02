@@ -25,7 +25,7 @@ build-and-run-light:
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
-    	--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
+    		--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
 	score-compose generate score-frontend.light.yaml \
 		--build 'frontend={"context":".","dockerfile":"Dockerfile.frontend","tags":["frontend:local"]}' \
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
@@ -40,7 +40,7 @@ run-light:
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
-    	--image ackend:local
+    		--image backend:local
 	score-compose generate score-frontend.light.yaml \
 		--image frontend:local \
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
