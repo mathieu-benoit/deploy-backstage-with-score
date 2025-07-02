@@ -52,7 +52,7 @@ docker run -it \
     ghcr.io/mathieu-benoit/backstage-frontend:latest
 ```
 
-Then navigate to http://localhost:7007.
+Then navigate to http://localhost:3000.
 
 ## With `score-compose`
 
@@ -92,7 +92,7 @@ score-compose generate score-frontend.light.yaml \
 docker compose up -d
 ```
 
-Then navigate to http://localhost:7007.
+Then navigate to http://localhost:3000.
 
 ## More advanced with `score-compose` and `score-k8s`
 
