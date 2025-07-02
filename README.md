@@ -1,8 +1,6 @@
-# [Backstage](https://backstage.io)
+This [Backstage](https://backstage.io) application is used as part of this blog post [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
 
-This Backstage application is used as part of this blog post [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
-
-You can deploy in different ways (by building new container images or using the pre-built ones):
+You can deploy this Backstage application in different ways (by building new container images or using the pre-built ones):
 - [With `yarn`](#with-yarn)
 - [With `docker`/`podman`](#with-dockerpodman)
 - [With `score-compose`](#with-score-compose)
