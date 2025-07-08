@@ -22,7 +22,9 @@ FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 .PHONY: build-and-run-light
 build-and-run-light:
 	score-compose init \
-		--no-sample
+		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
     		--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
 	score-compose generate score-frontend.light.yaml \
@@ -30,13 +32,16 @@ build-and-run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up --build -d --remove-orphans
 
 ## Run both backend:local and frontent:local container images with light Score files.
 .PHONY: run-light
 run-light:
 	score-compose init \
-		--no-sample
+		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
     		--image backend:local
 	score-compose generate score-frontend.light.yaml \
@@ -44,6 +49,7 @@ run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up -d --remove-orphans
 
 .score-compose/state.yaml:

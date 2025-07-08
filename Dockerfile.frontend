@@ -5,9 +5,11 @@ WORKDIR /app
 RUN yarn install --immutable
 RUN yarn workspace app build
 
-FROM nginx:1.29.0-alpine-slim@sha256:e4e764cb35f666f44dd4e1da4291a5f73bb8bff2a9464ccecd8a05a2b7226ad5
+FROM nginxinc/nginx-unprivileged:alpine-slim
+USER root
 RUN apk update && apk add jq && rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
 COPY container-config/default.conf.template /etc/nginx/templates/default.conf.template
 COPY container-config/inject-config.sh /docker-entrypoint.d/40-inject-config.sh
+USER $UID
 ENV PORT=8080
