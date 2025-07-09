@@ -32,6 +32,7 @@ build-and-run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up --build -d --remove-orphans
 
 ## Run both backend:local and frontent:local container images with light Score files.
@@ -48,6 +49,7 @@ run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up -d --remove-orphans
 
 .score-compose/state.yaml:
@@ -63,6 +65,7 @@ compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml M
 	score-compose generate score-frontend.yaml \
 		--build '${FRONTEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_CONTAINER_IMAGE}"]}' \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+	sudo yq e -i '.services.${FRONTEND_WORKLOAD_NAME}-${FRONTEND_CONTAINER_NAME}.read_only = false' compose.yaml
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up

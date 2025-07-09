@@ -7,10 +7,6 @@ containers:
     variables:
       APP_CONFIG_app_baseUrl: http://localhost:3000
       APP_CONFIG_backend_baseUrl: http://localhost:7007
-    volumes:
-      /etc/nginx/conf.d:
-        source: ${resources.confd}
-        readOnly: false
 service:
   ports:
     tcp:
@@ -19,5 +15,3 @@ service:
 resources:
   backend:
     type: service
-  confd:
-    type: volume
