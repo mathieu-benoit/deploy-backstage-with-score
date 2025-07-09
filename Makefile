@@ -64,6 +64,7 @@ compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml M
 	score-compose generate score-frontend.yaml \
 		--build '${FRONTEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_CONTAINER_IMAGE}"]}' \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+	sudo yq e -i '.services.${FRONTEND_WORKLOAD_NAME}-${FRONTEND_CONTAINER_NAME}.read_only = false' compose.yaml
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up

@@ -6,9 +6,12 @@ RUN yarn install --immutable
 RUN yarn workspace app build
 
 FROM nginxinc/nginx-unprivileged:alpine-slim
+ARG UID=101
 USER root
 RUN apk update && apk add jq && rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
+RUN chown -R $UID:0 /usr/share/nginx/html/static/
+RUN chmod -R g+w /usr/share/nginx/html/static/
 COPY container-config/default.conf.template /etc/nginx/templates/default.conf.template
 COPY container-config/inject-config.sh /docker-entrypoint.d/40-inject-config.sh
 USER $UID

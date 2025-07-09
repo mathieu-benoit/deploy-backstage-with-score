@@ -24,16 +24,20 @@ Then navigate to http://localhost:3000.
 ```sh
 docker image build -t backstage-backend:local .
 
-docker run -it \
+docker run -d \
+    -u 65532 \
+    --cap-drop=ALL \
+    --read-only \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
     backstage-backend:local
 
-
 docker image build -f Dockerfile.frontend -t backstage-frontend:local .
 
-docker run -it \
+docker run -d \
+    -u 65532 \
+    --cap-drop=ALL \
     -p 3000:8080 \
     backstage-frontend:local
 ```
@@ -41,13 +45,18 @@ docker run -it \
 ### By using the pre-built container image
 
 ```sh
-docker run -it \
+docker run -d \
+    -u 65532 \
+    --cap-drop=ALL \
+    --read-only \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
     ghcr.io/mathieu-benoit/backstage-backend:latest
 
-docker run -it \
+docker run -d \
+    -u 65532 \
+    --cap-drop=ALL \
     -p 3000:8080 \
     ghcr.io/mathieu-benoit/backstage-frontend:latest
 ```
@@ -70,6 +79,8 @@ score-compose generate score-frontend.light.yaml \
     --build 'frontend={"context":".","dockerfile":"Dockerfile.frontend","tags":["backstage-frontend:local"]}' \
     --publish 7007:backend:7007 \
     --publish 3000:frontend:8080
+
+sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 ```
 
 ```bash
@@ -86,6 +97,8 @@ score-compose generate score-frontend.light.yaml \
     --image ghcr.io/mathieu-benoit/backstage-frontend:latest \
     --publish 7007:backend:7007 \
     --publish 3000:frontend:8080
+
+sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 ```
 
 ```bash
