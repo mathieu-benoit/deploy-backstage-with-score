@@ -9,10 +9,6 @@ containers:
     variables:
       APP_CONFIG_app_baseUrl: ${resources.dns.url}
       APP_CONFIG_backend_baseUrl: ${resources.dns.url}
-    volumes:
-      /etc/nginx/conf.d:
-        source: ${resources.confd}
-        readOnly: false
     livenessProbe:
       httpGet:
         path: /healthcheck
@@ -29,8 +25,6 @@ service:
 resources:
   backend:
     type: service
-  confd:
-    type: volume
   dns:
     type: dns
     id: dns
