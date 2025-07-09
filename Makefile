@@ -118,6 +118,7 @@ manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Mak
 	score-k8s generate score-frontend.yaml \
 		--image ${FRONTEND_CONTAINER_IMAGE} \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
+	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem = false' manifests.yaml
 
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
 .PHONY: k8s-up
