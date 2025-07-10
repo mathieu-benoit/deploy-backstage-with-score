@@ -103,12 +103,13 @@ kind-load-images:
 	kind load docker-image ${BACKEND_CONTAINER_IMAGE}
 	kind load docker-image ${FRONTEND_CONTAINER_IMAGE}
 
-NAMESPACE ?= default
+NAMESPACE ?= test
 
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/namespace-pss-restricted.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
 
@@ -116,6 +117,8 @@ manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Mak
 	score-k8s generate score-backend.yaml \
 		--image ${BACKEND_CONTAINER_IMAGE}
 	score-k8s generate score-frontend.yaml \
+		--namespace ${NAMESPACE} \
+		--generate-namespace \
 		--image ${FRONTEND_CONTAINER_IMAGE} \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem = false' manifests.yaml
@@ -125,8 +128,7 @@ manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Mak
 .PHONY: k8s-up
 k8s-up: manifests.yaml
 	kubectl apply \
-		-f manifests.yaml \
-		-n ${NAMESPACE}
+		-f manifests.yaml
 	kubectl wait deployments/${BACKEND_WORKLOAD_NAME} \
 		-n ${NAMESPACE} \
 		--for condition=Available \
