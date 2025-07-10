@@ -22,7 +22,9 @@ FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 .PHONY: build-and-run-light
 build-and-run-light:
 	score-compose init \
-		--no-sample
+		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
     		--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
 	score-compose generate score-frontend.light.yaml \
@@ -30,13 +32,16 @@ build-and-run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up --build -d --remove-orphans
 
 ## Run both backend:local and frontent:local container images with light Score files.
 .PHONY: run-light
 run-light:
 	score-compose init \
-		--no-sample
+		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
     		--image backend:local
 	score-compose generate score-frontend.light.yaml \
@@ -44,11 +49,13 @@ run-light:
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
+	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 	docker compose up -d --remove-orphans
 
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-compose/10-dns-with-url.provisioners.yaml
 
@@ -58,6 +65,7 @@ compose.yaml: score-backend.yaml score-frontend.yaml .score-compose/state.yaml M
 	score-compose generate score-frontend.yaml \
 		--build '${FRONTEND_CONTAINER_NAME}={"context":".","dockerfile":"Dockerfile.frontend","tags":["${FRONTEND_CONTAINER_IMAGE}"]}' \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Compose!"
+	sudo yq e -i '.services.${FRONTEND_WORKLOAD_NAME}-${FRONTEND_CONTAINER_NAME}.read_only = false' compose.yaml
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -95,27 +103,33 @@ kind-load-images:
 	kind load docker-image ${BACKEND_CONTAINER_IMAGE}
 	kind load docker-image ${FRONTEND_CONTAINER_IMAGE}
 
-NAMESPACE ?= default
+NAMESPACE ?= test
 
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/namespace-pss-restricted.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/route/score-k8s/10-shared-gateway-httproute.provisioners.yaml
 
 manifests.yaml: score-backend.yaml score-frontend.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate score-backend.yaml \
 		--image ${BACKEND_CONTAINER_IMAGE}
 	score-k8s generate score-frontend.yaml \
+		--namespace ${NAMESPACE} \
+		--generate-namespace \
 		--image ${FRONTEND_CONTAINER_IMAGE} \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
+	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem = false' manifests.yaml
+	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.securityContext.runAsUser = 101' manifests.yaml
 
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
 .PHONY: k8s-up
 k8s-up: manifests.yaml
 	kubectl apply \
-		-f manifests.yaml \
-		-n ${NAMESPACE}
+		-f manifests.yaml
 	kubectl wait deployments/${BACKEND_WORKLOAD_NAME} \
 		-n ${NAMESPACE} \
 		--for condition=Available \
