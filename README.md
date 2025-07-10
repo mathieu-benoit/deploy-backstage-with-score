@@ -38,7 +38,6 @@ docker image build -f Dockerfile.frontend -t backstage-frontend:local .
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
-    --read-only \
     -p 3000:8080 \
     backstage-frontend:local
 ```
@@ -58,7 +57,6 @@ docker run -d \
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
-    --read-only \
     -p 3000:8080 \
     ghcr.io/mathieu-benoit/backstage-frontend:latest
 ```
@@ -81,6 +79,8 @@ score-compose generate score-frontend.light.yaml \
     --build 'frontend={"context":".","dockerfile":"Dockerfile.frontend","tags":["backstage-frontend:local"]}' \
     --publish 7007:backend:7007 \
     --publish 3000:frontend:8080
+
+sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 ```
 
 ```bash
@@ -97,6 +97,8 @@ score-compose generate score-frontend.light.yaml \
     --image ghcr.io/mathieu-benoit/backstage-frontend:latest \
     --publish 7007:backend:7007 \
     --publish 3000:frontend:8080
+
+sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
 ```
 
 ```bash
