@@ -32,7 +32,7 @@
     "@backstage/cli": "^0.33.1",
     "@backstage/e2e-test-utils": "^0.1.1",
     "@playwright/test": "^1.54.2",
-    "node-gyp": "^11..0",
+    "node-gyp": "^11.3.0",
     "prettier": "^3.6.2",
     "typescript": "~5.8.0"
   },
