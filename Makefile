@@ -26,7 +26,7 @@ build-and-run-light:
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
-    		--build 'backend={"context":".","dockerfile":"Dockerfile","tags":["backend:local"]}'
+    		--build 'backend={"context":".","tags":["backend:local"]}'
 	score-compose generate score-frontend.light.yaml \
 		--build 'frontend={"context":".","dockerfile":"Dockerfile.frontend","tags":["frontend:local"]}' \
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \

@@ -23,18 +23,17 @@ Then navigate to http://localhost:3000.
 
 ```sh
 docker image build -t backstage-backend:local .
-
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
     --read-only \
+    --tmpfs /tmp \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
     backstage-backend:local
 
 docker image build -f Dockerfile.frontend -t backstage-frontend:local .
-
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
@@ -49,6 +48,7 @@ docker run -d \
     -u 65532 \
     --cap-drop=ALL \
     --read-only \
+    --tmpfs /tmp \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
@@ -66,7 +66,9 @@ Then navigate to http://localhost:3000.
 ## With `score-compose`
 
 ```bash
-score-compose init --no-sample
+score-compose init --no-sample 	\
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 ```
 
 ### By building a new container image
