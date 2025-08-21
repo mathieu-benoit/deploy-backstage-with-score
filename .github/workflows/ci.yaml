@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
 jobs:
-  build-and-test-containers:
+  build-and-run-and-test-containers:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -32,3 +32,24 @@ jobs:
           make kind-create-cluster
           make kind-load-images
           make k8s-test
+  multi-arch-build-containers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v5
+      - name: build backend container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: Dockerfile
+          push: false
+          tags: "backend:test"
+      - name: build frontend container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          file: Dockerfile.frontend
+          push: false
+          tags: "frontend:test"
