@@ -66,7 +66,9 @@ Then navigate to http://localhost:3000.
 ## With `score-compose`
 
 ```bash
-score-compose init --no-sample
+score-compose init --no-sample 	\
+    --patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
+    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 ```
 
 ### By building a new container image

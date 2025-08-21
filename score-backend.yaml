@@ -30,6 +30,10 @@ containers:
       httpGet:
         path: /.backstage/health/v1/readiness
         port: 7007
+    volumes:
+      /tmp:
+        source: ${resources.tmp-dir}
+        readOnly: false
 service:
   ports:
     tcp:
@@ -47,3 +51,5 @@ resources:
       host: ${resources.dns.host}
       path: /api
       port: 7007
+  tmp-dir:
+    type: volume
