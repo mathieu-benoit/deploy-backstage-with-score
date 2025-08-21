@@ -45,17 +45,17 @@
     "@backstage/ui": "^0.7.0",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
-    "react": "^18.0.2",
-    "react-dom": "^18.0.2",
-    "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router": "^7.8.1",
+    "react-router-dom": "^7.8.1"
   },
   "devDependencies": {
     "@backstage/test-utils": "^1.7.11",
-    "@playwright/test": "^1.54.2",
+    "@playwright/test": "^1.55.0",
     "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.7.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.0.0",
     "@types/react-dom": "*",
     "cross-env": "^10.0.0"
