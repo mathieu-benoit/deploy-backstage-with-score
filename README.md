@@ -23,18 +23,17 @@ Then navigate to http://localhost:3000.
 
 ```sh
 docker image build -t backstage-backend:local .
-
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
     --read-only \
+    --tmpfs /tmp \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
     backstage-backend:local
 
 docker image build -f Dockerfile.frontend -t backstage-frontend:local .
-
 docker run -d \
     -u 65532 \
     --cap-drop=ALL \
@@ -49,6 +48,7 @@ docker run -d \
     -u 65532 \
     --cap-drop=ALL \
     --read-only \
+    --tmpfs /tmp \
     -e APP_CONFIG_backend_database_client='better-sqlite3' \
     -e APP_CONFIG_backend_database_connection=':memory:' \
     -p 7007:7007 \
