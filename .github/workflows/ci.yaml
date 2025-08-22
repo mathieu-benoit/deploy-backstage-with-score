@@ -21,6 +21,10 @@ jobs:
         run: |
           yarn install
           git diff --exit-code
+      - name: remove frontend from backend
+        run: |
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          make remove-frontend-from-backend
       - name: install score-compose
         uses: score-spec/setup-score@v3
         with:
