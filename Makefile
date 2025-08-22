@@ -18,6 +18,13 @@ FRONTEND_WORKLOAD_NAME = frontend
 FRONTEND_CONTAINER_NAME = frontend
 FRONTEND_CONTAINER_IMAGE = ${FRONTEND_CONTAINER_NAME}:local
 
+## Remove the frontend from the backend.
+.PHONY: remove-frontend-from-backend
+remove-frontend-from-backend:
+	sed '/plugin-app-backend/d' -i packages/backend/src/index.ts
+	sed '/"app": "link:../d' -i packages/backend/package.json
+	yarn install
+
 ## Build new backend:local and frontent:local container images and run them with light Score files.
 .PHONY: build-and-run-light
 build-and-run-light:
