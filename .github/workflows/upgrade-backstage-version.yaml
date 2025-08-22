@@ -34,6 +34,8 @@ jobs:
             Upgrade Backstage version from ${{ env.OLD_BACKSTAGE_VERSION }} to ${{ env.NEW_BACKSTAGE_VERSION }}:
             https://github.com/backstage/backstage/releases/tag/v${{ env.NEW_BACKSTAGE_VERSION }}
 
+            - [ ] Set PR as "Ready for review"
+            - [ ] Check CI
             - [ ] Check the Backstage upgrade helper: https://backstage.github.io/upgrade-helper/?from=${{ env.OLD_BACKSTAGE_VERSION }}&to=${{ env.NEW_BACKSTAGE_VERSION }}
           branch: upgrade-backstage
           delete-branch: true
