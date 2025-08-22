@@ -32,9 +32,9 @@ jobs:
           title: Backstage ${{ env.NEW_BACKSTAGE_VERSION }}
           body: |
             Upgrade Backstage version from ${{ env.OLD_BACKSTAGE_VERSION }} to ${{ env.NEW_BACKSTAGE_VERSION }}:
-            https://github.com/backstage/backstage/releases/tag/v${{ env.BACKSTAGE_VERSION }}
+            https://github.com/backstage/backstage/releases/tag/v${{ env.NEW_BACKSTAGE_VERSION }}
 
             Also, check the Backstage upgrade helper: https://backstage.github.io/upgrade-helper/?from=${{ env.OLD_BACKSTAGE_VERSION }}&to=${{ env.NEW_BACKSTAGE_VERSION }}
           branch: upgrade-backstage
           delete-branch: true
-          draft: always-true
+          draft: always-true # Because of: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#triggering-further-workflow-runs.
