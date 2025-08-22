@@ -6,7 +6,7 @@ permissions:
 on:
   workflow_dispatch:
 jobs:
-  update:
+  upgrade-backstage-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22.x
           cache: "npm"
-      - name: Re-generate generated content
+      - name: yarn backstage-cli versions:bump
         run: |
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           yarn install
@@ -27,10 +27,10 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Upgrade Backstage version to ${BACKSTAGE_VERSION}
-          title: Upgrade Backstage version to ${BACKSTAGE_VERSION}
+          commit-message: Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}
+          title: Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}
           body: |
-            Upgrade Backstage version to ${BACKSTAGE_VERSION}:
-            https://github.com/backstage/backstage/releases/tag/${BACKSTAGE_VERSION}
+            Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}:
+            https://github.com/backstage/backstage/releases/tag/${{ env.BACKSTAGE_VERSION }}
           branch: upgrade-backstage
           delete-branch: true
