@@ -1,6 +1,6 @@
 name: Upgrade Backstage version
 permissions:
-  contents: read
+  contents: write
   id-token: write
   pull-requests: write
 on:
