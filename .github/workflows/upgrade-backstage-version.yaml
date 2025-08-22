@@ -19,19 +19,22 @@ jobs:
           cache: "npm"
       - name: yarn backstage-cli versions:bump
         run: |
+          echo "OLD_BACKSTAGE_VERSION=$(cat backstage.json | jq -r .version)" >> ${{ github.env }}
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           yarn install
           yarn backstage-cli versions:bump
-          echo "BACKSTAGE_VERSION=$(curl -sL https://api.github.com/repos/backstage/backstage/releases/latest | jq -r .tag_name)" >> ${{ github.env }}
+          echo "NEW_BACKSTAGE_VERSION=$(cat backstage.json | jq -r .version)" >> ${{ github.env }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}
-          title: Backstage ${{ env.BACKSTAGE_VERSION }}
+          commit-message: Upgrade Backstage version to ${{ env.NEW_BACKSTAGE_VERSION }}
+          title: Backstage ${{ env.NEW_BACKSTAGE_VERSION }}
           body: |
-            Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}:
-            https://github.com/backstage/backstage/releases/tag/${{ env.BACKSTAGE_VERSION }}
+            Upgrade Backstage version from ${{ env.OLD_BACKSTAGE_VERSION }} to ${{ env.NEW_BACKSTAGE_VERSION }}:
+            https://github.com/backstage/backstage/releases/tag/v${{ env.BACKSTAGE_VERSION }}
+
+            Also, check the Backstage upgrade helper: https://backstage.github.io/upgrade-helper/?from=${{ env.OLD_BACKSTAGE_VERSION }}&to=${{ env.NEW_BACKSTAGE_VERSION }}
           branch: upgrade-backstage
           delete-branch: true
           draft: true
