@@ -19,7 +19,7 @@ jobs:
           cache: "npm"
       - name: Re-generate generated content
         run: |
-          yarn config set enableImmutableInstalls false
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           yarn install
           yarn backstage-cli versions:bump
       - name: Create Pull Request
