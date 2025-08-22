@@ -3,7 +3,9 @@ permissions:
   contents: read
 on:
   pull_request:
+    branches: [main]
   push:
+    branches: [main]
 jobs:
   build-and-test-containers:
     runs-on: ubuntu-latest
