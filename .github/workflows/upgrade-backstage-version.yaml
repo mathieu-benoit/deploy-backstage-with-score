@@ -1,4 +1,8 @@
 name: Upgrade Backstage version
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
 on:
   workflow_dispatch:
 jobs:
