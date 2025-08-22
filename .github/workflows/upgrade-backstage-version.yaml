@@ -1,0 +1,33 @@
+name: Upgrade Backstage version
+on:
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+      - name: Prepare to fetch external content
+        run: |
+          # Set github actions bot as the committer, see https://github.com/actions/checkout/pull/1184
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: Re-generate generated content
+        run: |
+          yarn install
+          yarn backstage-cli versions:bump
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Upgrade Backstage version"
+          title: Upgrade Backstage version
+          body: |
+            Upgrade Backstage version.
+          branch: upgrade-backstage
