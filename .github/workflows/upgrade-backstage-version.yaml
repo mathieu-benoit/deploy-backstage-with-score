@@ -22,12 +22,15 @@ jobs:
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           yarn install
           yarn backstage-cli versions:bump
+          echo "BACKSTAGE_VERSION=$(curl -sL https://api.github.com/repos/backstage/backstage/releases/latest | jq -r .tag_name)" >> ${{ github.env }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Upgrade Backstage version"
-          title: Upgrade Backstage version
+          commit-message: Upgrade Backstage version to ${BACKSTAGE_VERSION}
+          title: Upgrade Backstage version to ${BACKSTAGE_VERSION}
           body: |
-            Upgrade Backstage version.
+            Upgrade Backstage version to ${BACKSTAGE_VERSION}:
+            https://github.com/backstage/backstage/releases/tag/${BACKSTAGE_VERSION}
           branch: upgrade-backstage
+          delete-branch: true
