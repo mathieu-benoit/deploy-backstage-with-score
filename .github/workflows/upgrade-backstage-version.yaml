@@ -28,9 +28,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}
-          title: Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}
+          title: Backstage ${{ env.BACKSTAGE_VERSION }}
           body: |
             Upgrade Backstage version to ${{ env.BACKSTAGE_VERSION }}:
             https://github.com/backstage/backstage/releases/tag/${{ env.BACKSTAGE_VERSION }}
           branch: upgrade-backstage
           delete-branch: true
+          draft: true
