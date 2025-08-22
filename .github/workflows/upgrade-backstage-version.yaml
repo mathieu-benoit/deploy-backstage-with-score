@@ -37,6 +37,7 @@ jobs:
             - [ ] Set PR as "Ready for review"
             - [ ] Check CI
             - [ ] Check the Backstage upgrade helper: https://backstage.github.io/upgrade-helper/?from=${{ env.OLD_BACKSTAGE_VERSION }}&to=${{ env.NEW_BACKSTAGE_VERSION }}
+            - [ ] Submit PR review
           branch: upgrade-backstage
           delete-branch: true
           draft: always-true # Because of: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#triggering-further-workflow-runs.
