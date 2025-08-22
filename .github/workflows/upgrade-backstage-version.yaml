@@ -20,6 +20,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
       - name: Re-generate generated content
         run: |
+          yarn config set enableImmutableInstalls false
           yarn install
           yarn backstage-cli versions:bump
       - name: Create Pull Request
