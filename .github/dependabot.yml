@@ -16,14 +16,6 @@ updates:
       ci:
         patterns:
           - "*"
-  - package-ecosystem: "yarn"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      ci:
-        patterns:
-          - "*"
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
