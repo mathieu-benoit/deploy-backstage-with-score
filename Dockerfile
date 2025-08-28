@@ -53,7 +53,7 @@ FROM alpine:3.22.1@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8
 ENV PYTHON=/usr/bin/python3
 
 # Install isolate-vm dependencies, these are needed by the @backstage/plugin-scaffolder-backend.
-RUN apk add --no-cache g++ make python3 && \
+RUN apk add --no-cache g++ make nodejs python3 yarn && \
     rm -rf /var/lib/apk/lists/*
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
