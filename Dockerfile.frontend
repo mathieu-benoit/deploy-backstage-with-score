@@ -1,11 +1,11 @@
-FROM node:22-alpine@sha256:1b2479dd35a99687d6638f5976fd235e26c5b37e8122f786fcd5fe231d63de5b AS build
+FROM node:22-alpine@sha256:d2166de198f26e17e5a442f537754dd616ab069c47cc57b889310a717e0abbf9 AS build
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
 RUN yarn install --immutable
 RUN yarn workspace app build
 
-FROM nginxinc/nginx-unprivileged:1.29.1-alpine-slim@sha256:76f79f1f3c906a43076086e4517b019b3ab5cc18b3ed1b13417b583e0ab9b298
+FROM nginxinc/nginx-unprivileged:1.29.1-alpine-slim@sha256:0d019e980f83728002de7a6d8819d0d4af7179046d3946b8b37749953fbb28e6
 ARG UID=101
 USER root
 RUN apk update && apk add jq && rm -rf /var/lib/apk/lists/*
