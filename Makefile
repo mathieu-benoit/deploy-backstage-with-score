@@ -74,6 +74,7 @@ compose-monolith-test: compose-monolith-up
 .PHONY: remove-frontend-from-backend
 remove-frontend-from-backend:
 	sed '/plugin-app-backend/d' -i packages/backend/src/index.ts
+	sed '/plugin-app-backend/d' -i packages/backend/package.json
 	sed '/"app": "link:../d' -i packages/backend/package.json
 	yarn install
 

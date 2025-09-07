@@ -12,7 +12,7 @@ on:
   push:
     branches: [main]
 jobs:
-  build-and-test-containers:
+  build-and-test-monolith:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -31,17 +31,17 @@ jobs:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make compose-test
+      - name: make compose-monolith-test
         run: |
-          make compose-test
+          make compose-monolith-test
       - name: install score-k8s
         uses: score-spec/setup-score@v3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-test
+      - name: make k8s-monolith-test
         run: |
           make kind-create-cluster
           make kind-load-images
-          make k8s-test
+          make k8s-monolith-test
