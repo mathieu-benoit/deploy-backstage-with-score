@@ -12,28 +12,65 @@ on:
   push:
     branches: [main]
 jobs:
-  build-and-test-containers:
+  build-and-test-monolith:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v5
+      - name: Check git diff is clean (all files generated should be committed)
+        run: |
+          yarn install
+          git diff --exit-code
       - name: install score-compose
         uses: score-spec/setup-score@v3
         with:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make compose-test
+      - name: make compose-monolith-test
         run: |
-          make compose-test
+          make compose-monolith-test
       - name: install score-k8s
         uses: score-spec/setup-score@v3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-test
+      - name: make k8s-monolith-test
         run: |
           make kind-create-cluster
-          make kind-load-images
-          make k8s-test
+          make kind-load-monolith-image
+          make k8s-monolith-test
+  build-and-test-split:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v5
+      - name: Check git diff is clean (all files generated should be committed)
+        run: |
+          yarn install
+          git diff --exit-code
+      - name: remove frontend from backend
+        run: |
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          make remove-frontend-from-backend
+      - name: install score-compose
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-compose
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make compose-split-test
+        run: |
+          make compose-split-test
+      - name: install score-k8s
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-k8s
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make k8s-monolith-test
+        run: |
+          make kind-create-cluster
+          make kind-load-split-images
+          make k8s-split-test

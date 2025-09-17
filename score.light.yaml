@@ -15,23 +15,13 @@ containers:
       - "--config"
       - app-config.production.yaml
     variables:
-      POSTGRES_HOST: ${resources.pg.host}
-      POSTGRES_PASSWORD: ${resources.pg.password}
-      POSTGRES_PORT: ${resources.pg.port}
-      POSTGRES_USER: ${resources.pg.username}
+      APP_CONFIG_backend_database_client: "better-sqlite3"
+      APP_CONFIG_backend_database_connection: ":memory:"
       APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: "true"
-      APP_CONFIG_app_baseUrl: ${resources.dns.url}
-      APP_CONFIG_backend_baseUrl: ${resources.dns.url}
-      APP_CONFIG_backend_cors_origin: ${resources.dns.url}
+      APP_CONFIG_app_baseUrl: http://localhost:3000
+      APP_CONFIG_backend_baseUrl: http://localhost:7007
+      APP_CONFIG_backend_cors_origin: http://localhost:3000
       APP_CONFIG_techRadar_url: https://github.com/mathieu-benoit/humanitec-ref-arch/blob/main/tech-radar.json
-    livenessProbe:
-      httpGet:
-        path: /.backstage/health/v1/liveness
-        port: 7007
-    readinessProbe:
-      httpGet:
-        path: /.backstage/health/v1/readiness
-        port: 7007
     volumes:
       /tmp:
         source: ${resources.tmp-dir}
@@ -42,15 +32,5 @@ service:
       port: 7007
       targetPort: 7007
 resources:
-  pg:
-    type: postgres-instance
-  dns:
-    type: dns
-  route:
-    type: route
-    params:
-      host: ${resources.dns.host}
-      path: /
-      port: 7007
   tmp-dir:
     type: volume
