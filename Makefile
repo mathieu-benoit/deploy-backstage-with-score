@@ -67,7 +67,7 @@ compose-monolith-up: compose-monolith
 compose-monolith-test: compose-monolith-up
 	docker ps --all
 	curl -v localhost:8080 \
-		-H "Host: $$(score-compose resources get-outputs dns.default#backstage.dns --format '{{ .host }}')" \
+		-H "Host: $$(score-compose resources get-outputs dns.default#${MONOLITH_WORKLOAD_NAME}.dns --format '{{ .host }}')" \
 		| grep "<title>Hello, Compose!</title>"
 
 ## Remove the frontend from the backend.
@@ -169,6 +169,50 @@ kind-load-monolith-image:
 	kind load docker-image ${MONOLITH_CONTAINER_IMAGE}
 
 NAMESPACE ?= test
+
+k8s-monolith-state:
+	score-k8s init \
+		--no-sample \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/unprivileged.tpl \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/namespace-pss-restricted.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/dns/score-k8s/10-dns-with-url.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/route/score-k8s/10-shared-gateway-httproute.provisioners.yaml
+
+k8s-monolith-manifests: score.yaml k8s-monolith-state Makefile
+	score-k8s generate score.yaml \
+		--namespace ${NAMESPACE} \
+		--generate-namespace \
+		--image ${MONOLITH_CONTAINER_IMAGE} \
+		--override-property containers.${MONOLITH_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
+
+## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
+.PHONY: k8s-monolith-up
+k8s-monolith-up: k8s-monolith-manifests
+	kubectl apply \
+		-f manifests.yaml
+	kubectl wait deployments/${MONOLITH_WORKLOAD_NAME} \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait pods \
+		-n ${NAMESPACE} \
+		-l app.kubernetes.io/managed-by=score-k8s \
+		--for condition=Ready \
+		--timeout=90s
+	sleep 5
+
+## Expose the container deployed in Kubernetes via port-forward.
+.PHONY: k8s-monolith-test
+k8s-monolith-test: k8s-monolith-up
+	sleep 5
+	kubectl get all,httproute \
+		-n ${NAMESPACE}
+	kubectl logs \
+		-l app.kubernetes.io/name=${MONOLITH_WORKLOAD_NAME} \
+		-n ${NAMESPACE}
+	curl -v localhost:80 \
+		-H "Host: $$(score-k8s resources get-outputs dns.default#${MONOLITH_WORKLOAD_NAME}dns --format '{{ .host }}')" \
+		| grep "<title>Hello, Kubernetes!</title>"
 
 k8s-split-state:
 	score-k8s init \
