@@ -211,7 +211,7 @@ k8s-monolith-test: k8s-monolith-up
 		-l app.kubernetes.io/name=${MONOLITH_WORKLOAD_NAME} \
 		-n ${NAMESPACE}
 	curl -v localhost:80 \
-		-H "Host: $$(score-k8s resources get-outputs dns.default#${MONOLITH_WORKLOAD_NAME}dns --format '{{ .host }}')" \
+		-H "Host: $$(score-k8s resources get-outputs dns.default#${MONOLITH_WORKLOAD_NAME}.dns --format '{{ .host }}')" \
 		| grep "<title>Hello, Kubernetes!</title>"
 
 k8s-split-state:
