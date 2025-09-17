@@ -67,8 +67,8 @@ compose-monolith-up: compose-monolith
 compose-monolith-test: compose-monolith-up
 	docker ps --all
 	curl -v localhost:8080 \
-		-H "Host: $$(score-compose resources get-outputs dns.default#dns --format '{{ .host }}')" \
-		| grep "<title>Scaffolded Backstage App</title>"
+		-H "Host: $$(score-compose resources get-outputs dns.default#backstage.dns --format '{{ .host }}')" \
+		| grep "<title>Hello, Compose!</title>"
 
 ## Remove the frontend from the backend.
 .PHONY: remove-frontend-from-backend
