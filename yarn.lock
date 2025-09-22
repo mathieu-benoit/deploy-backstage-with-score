@@ -14940,8 +14940,8 @@ __metadata:
     cross-env: "npm:^10.0.0"
     react: "npm:^18.0.2"
     react-dom: "npm:^18.0.2"
-    react-router: "npm:^7.8.2"
-    react-router-dom: "npm:^7.8.2"
+    react-router: "npm:^7.9.1"
+    react-router-dom: "npm:^7.9.1"
   languageName: unknown
   linkType: soft
 
@@ -15363,14 +15363,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.0.0, axios@npm:^1.7.4, axios@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "axios@npm:1.9.0"
+"axios@npm:>=1.12.0":
+  version: 1.12.2
+  resolution: "axios@npm:1.12.2"
   dependencies:
     follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.0"
+    form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/9371a56886c2e43e4ff5647b5c2c3c046ed0a3d13482ef1d0135b994a628c41fbad459796f101c655e62f0c161d03883454474d2e435b2e021b1924d9f24994c
+  checksum: 10c0/80b063e318cf05cd33a4d991cea0162f3573481946f9129efb7766f38fde4c061c34f41a93a9f9521f02b7c9565ccbc197c099b0186543ac84a24580017adfed
   languageName: node
   linkType: hard
 
@@ -15543,7 +15543,7 @@ __metadata:
     "@backstage/plugin-signals-backend": "npm:^0.3.8"
     "@backstage/plugin-techdocs-backend": "npm:^2.1.0"
     app: "link:../app"
-    better-sqlite3: "npm:^12.2.0"
+    better-sqlite3: "npm:^12.3.0"
     node-gyp: "npm:^11.4.2"
     pg: "npm:^8.16.3"
   languageName: unknown
@@ -15644,7 +15644,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-sqlite3@npm:^12.0.0, better-sqlite3@npm:^12.2.0":
+"better-sqlite3@npm:^12.0.0":
   version: 12.2.0
   resolution: "better-sqlite3@npm:12.2.0"
   dependencies:
@@ -15652,6 +15652,17 @@ __metadata:
     node-gyp: "npm:latest"
     prebuild-install: "npm:^7.1.1"
   checksum: 10c0/842247e9bbb775f366ac91f604117112c312497e643bac21648d8b69f479763de0ac049b14b609d6d5ecaee50debcc09a854f682d3dc099a1d933fea92ce68d0
+  languageName: node
+  linkType: hard
+
+"better-sqlite3@npm:^12.3.0":
+  version: 12.3.0
+  resolution: "better-sqlite3@npm:12.3.0"
+  dependencies:
+    bindings: "npm:^1.5.0"
+    node-gyp: "npm:latest"
+    prebuild-install: "npm:^7.1.1"
+  checksum: 10c0/e7800707e4a22988833a902cabf10d602679c3d26526d16d5d2c3c0e01b9bf172f02c96828895eeb354a36d1177628c0a5c3e60047ef6715454de8ae8276166d
   languageName: node
   linkType: hard
 
@@ -15809,21 +15820,21 @@ __metadata:
   linkType: hard
 
 "brace-expansion@npm:^1.1.7":
-  version: 1.1.11
-  resolution: "brace-expansion@npm:1.1.11"
+  version: 1.1.12
+  resolution: "brace-expansion@npm:1.1.12"
   dependencies:
     balanced-match: "npm:^1.0.0"
     concat-map: "npm:0.0.1"
-  checksum: 10c0/695a56cd058096a7cb71fb09d9d6a7070113c7be516699ed361317aca2ec169f618e28b8af352e02ab4233fb54eb0168460a40dc320bab0034b36ab59aaad668
+  checksum: 10c0/975fecac2bb7758c062c20d0b3b6288c7cc895219ee25f0a64a9de662dbac981ff0b6e89909c3897c1f84fa353113a721923afdec5f8b2350255b097f12b1f73
   languageName: node
   linkType: hard
 
 "brace-expansion@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "brace-expansion@npm:2.0.1"
+  version: 2.0.2
+  resolution: "brace-expansion@npm:2.0.2"
   dependencies:
     balanced-match: "npm:^1.0.0"
-  checksum: 10c0/b358f2fe060e2d7a87aa015979ecea07f3c37d4018f8d6deb5bd4c229ad3a0384fe6029bb76cd8be63c81e516ee52d1a0673edbe2023d53a5191732ae3c3e49f
+  checksum: 10c0/6d117a4c793488af86b83172deb6af143e94c17bc53b0b3cec259733923b4ca84679d506ac261f4ba3c7ed37c46018e2ff442f9ce453af8643ecd64f4a54e6cf
   languageName: node
   linkType: hard
 
@@ -28472,21 +28483,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.8.2":
-  version: 7.8.2
-  resolution: "react-router-dom@npm:7.8.2"
+"react-router-dom@npm:^7.9.1":
+  version: 7.9.1
+  resolution: "react-router-dom@npm:7.9.1"
   dependencies:
-    react-router: "npm:7.8.2"
+    react-router: "npm:7.9.1"
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10c0/b285182ffa1b26df5025f6e7952edca066928d5688d3447b02e4a7e699ca16941e8a42ecad65ab505914e27fed04a2023c92ae3ebf838226b4381a2e3a69ae01
+  checksum: 10c0/a211b9e6d69e6efc9b55cfc0f1eb8a772832f86b13fd16a6d89befb78ff6bfc06d9cc48abf4b96420edd81a07216f910c15afb0769ae4d4f445b59d4e2ec9376
   languageName: node
   linkType: hard
 
-"react-router@npm:7.8.2, react-router@npm:^7.8.2":
-  version: 7.8.2
-  resolution: "react-router@npm:7.8.2"
+"react-router@npm:7.9.1, react-router@npm:^7.9.1":
+  version: 7.9.1
+  resolution: "react-router@npm:7.9.1"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -28496,7 +28507,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/e3122c2949bcad5e9c990cfb88e9cbd139e5a2a5c1d29664732623907a488634c0ddbf673d07af8f113d418f66270c174f014de8b885996722f431d09f5734be
+  checksum: 10c0/27448e4c84199d240f6a15d503cf26509320fd4ea31aec6f12a427ac4a560a320321e9b119981eddad25801c062be0f814d4461174f69efdc9f9e5af14cf6915
   languageName: node
   linkType: hard
 
