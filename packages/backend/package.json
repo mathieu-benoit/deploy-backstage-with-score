@@ -44,7 +44,7 @@
     "@backstage/plugin-signals-backend": "^0.3.8",
     "@backstage/plugin-techdocs-backend": "^2.1.0",
     "app": "link:../app",
-    "better-sqlite3": "^12.3.0",
+    "better-sqlite3": "^12.4.1",
     "node-gyp": "^11.4.2",
     "pg": "^8.16.3"
   },
