@@ -30,7 +30,7 @@ build-and-run-monolith-light:
 	score-compose generate score.light.yaml \
     	--build 'backstage={"context":".","tags":["backstage:local"]}' \
 		--override-property containers.backstage.variables.APP_CONFIG_app_title="Hello, Compose!" \
-		--publish 7007:backstage:8080
+		--publish 7007:backstage:7007
 	docker compose up --build -d --remove-orphans
 
 ## Run backstage:local container images with light Score files.
@@ -42,7 +42,7 @@ run-monolith-light:
 	score-compose generate score.light.yaml \
     	--image backstage:local \
 		--override-property containers.backstage.variables.APP_CONFIG_app_title="Hello, Compose!" \
-		--publish 7007:backstage:8080
+		--publish 7007:backstage:7007
 	docker compose up -d --remove-orphans
 
 compose-monolith-state:
