@@ -16,6 +16,13 @@ updates:
       ci:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "react"
+        versions: [ ">=19" ]
+      - dependency-name: "react-dom"
+        versions: [ ">=19" ]
+      - dependency-name: "@types/react-dom"
+        versions: [ ">=19" ]
   - package-ecosystem: "docker"
     directory: "/"
     schedule:

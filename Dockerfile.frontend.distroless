@@ -1,14 +1,18 @@
-FROM node:22-alpine@sha256:cb3143549582cc5f74f26f0992cdef4a422b22128cb517f94173a5f910fa4ee7 AS build
+FROM cgr.dev/chainguard/wolfi-base:latest AS build
+ENV NODE_VERSION=22
+RUN apk add --no-cache nodejs-$NODE_VERSION python-$PYTHON_VERSION yarn && \
+    rm -rf /var/lib/apk/lists/*
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
 RUN yarn install --immutable
 RUN yarn workspace app build
 
-FROM nginxinc/nginx-unprivileged:1.29.1-alpine-slim@sha256:5699de1d742a2ec471c1cafb7d852146660f53f57b593d50b11c02170172ebd4
+FROM cgr.dev/chainguard/nginx:latest
 ARG UID=101
 USER root
-RUN apk add --no-cache jq && rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache jq && \
+    rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
 RUN chown -R $UID:0 /usr/share/nginx/html/static/
 RUN chmod -R g+w /usr/share/nginx/html/static/
