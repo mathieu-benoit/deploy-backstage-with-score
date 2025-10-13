@@ -12,35 +12,40 @@ on:
   push:
     branches: [main]
 jobs:
-  build-and-test-monolith:
+  multi-arch-build-frontend-container:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v5
-      - name: Check git diff is clean (all files generated should be committed)
-        run: |
-          yarn install
-          git diff --exit-code
-      - name: install score-compose
-        uses: score-spec/setup-score@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: build frontend container image
+        uses: docker/build-push-action@v6
         with:
-          file: score-compose
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: "latest"
-      - name: make compose-monolith-test
-        run: |
-          make compose-monolith-test
-      - name: install score-k8s
-        uses: score-spec/setup-score@v3
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: Dockerfile.frontend
+          push: false
+          tags: "frontend:test"
+  multi-arch-build-backend-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v5
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: build backend container image
+        uses: docker/build-push-action@v6
         with:
-          file: score-k8s
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: "latest"
-      - name: make k8s-monolith-test
-        run: |
-          make kind-create-cluster
-          make kind-load-monolith-image
-          make k8s-monolith-test
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: Dockerfile
+          push: false
+          tags: "backend:test"
   build-and-test-split:
     runs-on: ubuntu-latest
     steps:
