@@ -78,6 +78,13 @@ remove-frontend-from-backend:
 	sed '/"app": "link:../d' -i packages/backend/package.json
 	yarn install
 
+## Remove better-sqlite3 from backend.
+.PHONY: remove-better-sqlite3
+remove-better-sqlite3:
+	sed '/sqlite-dev/d' -i Dockerfile
+	sed '/better-sqlite3/d' -i packages/backend/package.json
+	yarn install
+
 ## Build new backend:local and frontent:local container images and run them with light Score files.
 .PHONY: build-and-run-split-light
 build-and-run-split-light:

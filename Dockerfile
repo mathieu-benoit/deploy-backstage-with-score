@@ -26,8 +26,7 @@ RUN apk add --no-cache g++ make python3 && \
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
-RUN apk add --no-cache sqlite-dev && \
-    rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 
 USER node
 WORKDIR /app
@@ -58,8 +57,7 @@ RUN apk add --no-cache g++ make nodejs python3 yarn && \
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
-RUN apk add --no-cache sqlite-dev && \
-    rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 
 # From here on we use the least-privileged `node` user to run the backend.
 RUN addgroup -S node && adduser -S node -G node
