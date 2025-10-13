@@ -1,6 +1,6 @@
 # Taken from https://backstage.io/docs/deployment/docker/#multi-stage-build
 # Stage 1 - Create yarn install skeleton layer
-FROM node:22-alpine@sha256:cb3143549582cc5f74f26f0992cdef4a422b22128cb517f94173a5f910fa4ee7 AS packages
+FROM node:22-alpine@sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af AS packages
 
 WORKDIR /app
 COPY backstage.json package.json yarn.lock ./
@@ -15,7 +15,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2 - Install dependencies and build packages
-FROM node:22-alpine@sha256:cb3143549582cc5f74f26f0992cdef4a422b22128cb517f94173a5f910fa4ee7 AS build
+FROM node:22-alpine@sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af AS build
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
@@ -47,7 +47,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3 - Build the actual backend image and install production dependencies
-FROM alpine:3.22.1@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
+FROM alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
