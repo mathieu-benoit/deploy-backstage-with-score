@@ -5,7 +5,7 @@ WORKDIR /app
 RUN yarn install --immutable
 RUN yarn workspace app build
 
-FROM nginxinc/nginx-unprivileged:1.29.2-alpine-slim@sha256:75aca27e8bcc0b27dd1151fa0c003281824f8f6aedf82e9b96b2210fad6d2d24
+FROM nginxinc/nginx-unprivileged:1.29.2-alpine-slim@sha256:12b55754aca7639c7acc6bdf75169c77a212f54d6b976e5402057954614b19e0
 ARG UID=101
 USER root
 RUN apk add --no-cache jq && rm -rf /var/lib/apk/lists/*
