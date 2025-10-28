@@ -14,8 +14,8 @@ USER root
 RUN apk add --no-cache jq && \
     rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
-RUN chown -R $UID:0 /usr/share/nginx/html/static/
-RUN chmod -R g+w /usr/share/nginx/html/static/
+RUN chown -R $UID:0 /usr/share/nginx/html/
+RUN chmod -R g+w /usr/share/nginx/html/
 COPY container-config/default.conf.template /etc/nginx/templates/default.conf.template
 COPY container-config/inject-config.sh /docker-entrypoint.d/40-inject-config.sh
 USER $UID
