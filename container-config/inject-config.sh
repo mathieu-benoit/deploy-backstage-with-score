@@ -32,4 +32,10 @@ function inject_config() {
   sed -e "s/__APP_INJECTED_RUNTIME_CONFIG__/$config_escaped_2/" -i "$main_js"
 }
 
+# Based on this https://github.com/backstage/backstage/issues/30986#issuecomment-3386222340.
+function tmp_remove_script_in_index_html() {
+  sed -Ei ':a;N;$!ba;s|<script type="backstage.io/config">.*?</script>||g' /usr/share/nginx/html/index.html
+}
+
+tmp_remove_script_in_index_html
 inject_config

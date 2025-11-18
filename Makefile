@@ -40,7 +40,7 @@ run-monolith-light:
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl
 	score-compose generate score.light.yaml \
-    	--image backstage:local \
+    	--image ghcr.io/mathieu-benoit/backstage:latest \
 		--override-property containers.backstage.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backstage:7007
 	docker compose up -d --remove-orphans
@@ -110,9 +110,9 @@ run-split-light:
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/unprivileged.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 	score-compose generate score-backend.light.yaml \
-    	--image backend:local
+    	--image ghcr.io/mathieu-benoit/backstage-backend:latest
 	score-compose generate score-frontend.light.yaml \
-		--image frontend:local \
+		--image ghcr.io/mathieu-benoit/backstage-frontend:latest \
 		--override-property containers.frontend.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
