@@ -46,6 +46,35 @@ jobs:
           file: Dockerfile
           push: false
           tags: "backend:test"
+  build-and-test-monolith:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v5
+      - name: Check git diff is clean (all files generated should be committed)
+        run: |
+          yarn install
+          git diff --exit-code
+      - name: install score-compose
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-compose
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make compose-monolith-test
+        run: |
+          make compose-monolith-test
+      - name: install score-k8s
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-k8s
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest"
+      - name: make k8s-monolith-test
+        run: |
+          make kind-create-cluster
+          make kind-load-monolith-image
+          make k8s-monolith-test
   build-and-test-split:
     runs-on: ubuntu-latest
     steps:
