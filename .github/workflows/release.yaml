@@ -35,6 +35,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: Dockerfile
           push: true
+          provenance: mode=max
+          sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-dev,ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:dev"
   build-push-monolith:
     runs-on: ubuntu-24.04
@@ -62,6 +64,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: Dockerfile
           push: true
+          provenance: mode=max
+          sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:latest"
   build-push-frontend:
     runs-on: ubuntu-24.04
@@ -89,6 +93,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: Dockerfile.frontend
           push: true
+          provenance: mode=max
+          sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:latest"
   build-push-backend-dev:
     runs-on: ubuntu-24.04
@@ -116,6 +122,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: Dockerfile
           push: true
+          provenance: mode=max
+          sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-dev,ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:dev"
   build-push-backend:
     runs-on: ubuntu-24.04
@@ -147,4 +155,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: Dockerfile
           push: true
+          provenance: mode=max
+          sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:latest"
