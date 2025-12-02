@@ -60,6 +60,7 @@ compose-monolith: score-backend.yaml score.yaml compose-monolith-state Makefile
 .PHONY: compose-monolith-up
 compose-monolith-up: compose-monolith
 	docker compose up --build -d --remove-orphans --wait
+	sleep 5
 
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-monolith-test
