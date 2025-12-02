@@ -65,6 +65,9 @@ jobs:
           provenance: mode=max
           sbom: true
           tags: backstage:main
+      - name: docker images
+        run: |
+          docker images
       - name: Docker Scout
         uses: docker/scout-action@v1
         with:
