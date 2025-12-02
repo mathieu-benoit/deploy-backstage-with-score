@@ -35,10 +35,6 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: remove better-sqlite3
-        run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
-          make remove-better-sqlite3
       - name: Build container image
         uses: docker/build-push-action@v6
         with:
@@ -49,7 +45,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: mode=max
           sbom: true
-          tags: backstage:test
+          tags: backstage:local
       - name: docker images
         run: |
           docker images
@@ -59,8 +55,8 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: compare
-          image: local://backstage:test
-          to: ghcr.io/mathieu-benoit/backstage:latest
+          image: local://backstage:local
+          to: ghcr.io/mathieu-benoit/backstage:dev
           write-comment: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
   multi-arch-build-frontend-container:
