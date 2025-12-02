@@ -15,6 +15,7 @@ on:
 jobs:
   scan-and-compare:
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: checkout code
         uses: actions/checkout@v5
@@ -35,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build container image
+      - name: Build container image from PR branch
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -45,18 +46,31 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: mode=max
           sbom: true
-          tags: backstage:local
+          tags: backstage:pr-${{ github.event.number }}
       - name: docker images
         run: |
           docker images
+      - name: checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: main
+      - name: Build container image from main branch
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+          tags: backstage:main
       - name: Docker Scout
-        id: docker-scout
-        if: ${{ github.event_name == 'pull_request' }}
         uses: docker/scout-action@v1
         with:
           command: compare
-          image: local://backstage:local
-          to: ghcr.io/mathieu-benoit/backstage:dev
+          image: local://backstage:pr-${{ github.event.number }}
+          to: local://backstage:main
           write-comment: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
   multi-arch-build-frontend-container:
