@@ -31,7 +31,7 @@ build-and-run-monolith-light:
     	--build 'backstage={"context":".","tags":["backstage:local"]}' \
 		--override-property containers.backstage.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backstage:7007
-	docker compose up --build -d --remove-orphans
+	docker compose up --build -d --remove-orphans --wait
 
 ## Run backstage:local container images with light Score files.
 .PHONY: run-monolith-light
@@ -43,7 +43,7 @@ run-monolith-light:
     	--image ghcr.io/mathieu-benoit/backstage:latest \
 		--override-property containers.backstage.variables.APP_CONFIG_app_title="Hello, Compose!" \
 		--publish 7007:backstage:7007
-	docker compose up -d --remove-orphans
+	docker compose up -d --remove-orphans --wait
 
 compose-monolith-state:
 	score-compose init \
@@ -59,7 +59,7 @@ compose-monolith: score-backend.yaml score.yaml compose-monolith-state Makefile
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-monolith-up
 compose-monolith-up: compose-monolith
-	docker compose up --build -d --remove-orphans
+	docker compose up --build -d --remove-orphans --wait
 	sleep 5
 
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
@@ -100,7 +100,7 @@ build-and-run-split-light:
 		--publish 7007:backend:7007 \
 		--publish 3000:frontend:8080
 	sudo yq e -i '.services.frontend-frontend.read_only = false' compose.yaml
-	docker compose up --build -d --remove-orphans
+	docker compose up --build -d --remove-orphans --wait
 
 ## Run both backend:local and frontent:local container images with light Score files.
 .PHONY: run-split-light
@@ -137,8 +137,7 @@ compose-split: score-backend.yaml score-frontend.yaml compose-split-state Makefi
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-split-up
 compose-split-up: compose-split
-	docker compose up --build -d --remove-orphans
-	sleep 5
+	docker compose up --build -d --remove-orphans --wait
 
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-split-test
