@@ -54,7 +54,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: docker/scout-action@v1
         with:
-          command: quickview
+          command: quickview,cves,recommendations,compare
           image: local://backstage:test
           to: ghcr.io/mathieu-benoit/backstage:latest
           write-comment: true
