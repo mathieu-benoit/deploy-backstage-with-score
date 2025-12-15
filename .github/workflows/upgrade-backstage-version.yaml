@@ -27,7 +27,7 @@ jobs:
           yarn backstage-cli versions:bump
           echo "NEW_BACKSTAGE_VERSION=$(cat backstage.json | jq -r .version)" >> ${{ github.env }}
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Upgrade Backstage version from ${{ env.OLD_BACKSTAGE_VERSION }} to ${{ env.NEW_BACKSTAGE_VERSION }}
