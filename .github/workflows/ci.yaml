@@ -115,8 +115,12 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
       - name: Check git diff is clean (all files generated should be committed)
         run: |
+          node --version
           yarn install
           git diff --exit-code
       - name: install score-compose
@@ -144,8 +148,12 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
       - name: Check git diff is clean (all files generated should be committed)
         run: |
+          node --version
           yarn install
           git diff --exit-code
       - name: remove frontend from backend

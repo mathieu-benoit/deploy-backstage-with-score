@@ -18,7 +18,7 @@ RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {
 FROM cgr.dev/chainguard/wolfi-base:latest AS build
 USER root
 
-ENV NODE_VERSION=22
+ENV NODE_VERSION=24
 ENV PYTHON_VERSION=3.14
 
 # Set Python interpreter for `node-gyp` to use
@@ -55,7 +55,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
 FROM cgr.dev/chainguard/wolfi-base:latest
 USER root
 
-ENV NODE_VERSION=22
+ENV NODE_VERSION=24
 ENV PYTHON_VERSION=3.14
 
 # Set Python interpreter for `node-gyp` to use
