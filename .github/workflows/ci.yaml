@@ -117,6 +117,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Check git diff is clean (all files generated should be committed)
         run: |
+          node --version
           yarn install
           git diff --exit-code
       - name: install score-compose
@@ -146,6 +147,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Check git diff is clean (all files generated should be committed)
         run: |
+          node --version
           yarn install
           git diff --exit-code
       - name: remove frontend from backend
