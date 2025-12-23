@@ -1,9 +1,9 @@
 {
 	"name": "Score & Humanitec Dev Container",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:24",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"moby": true,
+			"moby": false,
 			"version": "latest"
 		},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
