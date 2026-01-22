@@ -4732,9 +4732,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/ui@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@backstage/ui@npm:0.11.0"
+"@backstage/ui@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "@backstage/ui@npm:0.11.1"
   dependencies:
     "@backstage/version-bridge": "npm:^1.0.11"
     "@remixicon/react": "npm:^4.6.0"
@@ -4749,7 +4749,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/d05cc86a00bd9fb96fe20fac4718de5d91a1500086eaf7ea97ff473f1d855c28d1c559f165731cffa8250ecf5f92cfe3e2453286f8f6626917b162ff33f44d87
+  checksum: 10c0/37f57dc2a6323ba2dd16956816dad1d33002a977d48cc7810e309631edcfba8a53ef048cecada62d732deb2a2e6ccac9bb5911b2619191d07ff23bbc4e465b39
   languageName: node
   linkType: hard
 
@@ -14921,7 +14921,7 @@ __metadata:
     "@backstage/plugin-user-settings": "npm:^0.8.31"
     "@backstage/test-utils": "npm:^1.7.14"
     "@backstage/theme": "npm:^0.7.1"
-    "@backstage/ui": "npm:^0.11.0"
+    "@backstage/ui": "npm:^0.11.1"
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@playwright/test": "npm:^1.57.0"
