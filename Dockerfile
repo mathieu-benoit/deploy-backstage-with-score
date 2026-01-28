@@ -1,6 +1,6 @@
 # Taken from https://backstage.io/docs/deployment/docker/#multi-stage-build
 # Stage 1 - Create yarn install skeleton layer
-FROM --platform=$BUILDPLATFORM node:24-alpine@sha256:931d7d57f8c1fd0e2179dbff7cc7da4c9dd100998bc2b32afc85142d8efbc213 AS packages
+FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-dev AS packages
 
 WORKDIR /app
 COPY backstage.json package.json yarn.lock ./
@@ -15,7 +15,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2 - Install dependencies and build packages
-FROM --platform=$BUILDPLATFORM node:24-alpine@sha256:931d7d57f8c1fd0e2179dbff7cc7da4c9dd100998bc2b32afc85142d8efbc213 AS build
+FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-dev AS build
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
@@ -28,40 +28,38 @@ RUN apk add --no-cache g++ make python3 && \
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
 RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 
-USER node
+#USER node
 WORKDIR /app
 
 COPY --from=packages --chown=node:node /app .
 
 RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
+    unset YARN_DISABLE_SELF_UPDATE_CHECK && \
     yarn install --immutable
 
 COPY --chown=node:node . .
 
-RUN yarn tsc
-RUN yarn --cwd packages/backend build
+RUN unset YARN_DISABLE_SELF_UPDATE_CHECK && yarn tsc
+RUN unset YARN_DISABLE_SELF_UPDATE_CHECK && yarn --cwd packages/backend build
 
 RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/skeleton.tar.gz -C packages/backend/dist/skeleton \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3 - Build the actual backend image and install production dependencies
-FROM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62
+FROM dhi.io/node:24-alpine3.23-dev
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
 
 # Install isolate-vm dependencies, these are needed by the @backstage/plugin-scaffolder-backend.
-RUN apk add --no-cache g++ make nodejs python3 yarn && \
+RUN apk add --no-cache g++ make python3 && \
     rm -rf /var/lib/apk/lists/*
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
 RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
-
-# From here on we use the least-privileged `node` user to run the backend.
-RUN addgroup -S node && adduser -S node -G node
-USER node
+#USER node
 
 # This should create the app dir as `node`.
 # If it is instead created as `root` then the `tar` command below will
@@ -81,6 +79,7 @@ COPY --from=build --chown=node:node /app/yarn.lock /app/package.json /app/packag
 # be linked in node_modules/.bin during yarn install.
 
 RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
+    unset YARN_DISABLE_SELF_UPDATE_CHECK && \
     yarn workspaces focus --all --production && rm -rf "$(yarn cache clean)"
 
 # Copy the built packages from the build stage
@@ -97,5 +96,7 @@ ENV NODE_ENV=production
 
 # This disables node snapshot for Node 20 to work with the Scaffolder
 ENV NODE_OPTIONS="--no-node-snapshot"
+
+USER node
 
 CMD ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
