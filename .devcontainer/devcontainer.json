@@ -1,5 +1,5 @@
 {
-	"name": "Score & Humanitec Dev Container",
+	"name": "Node.js, Docker, Kubernetes & Score Dev Container",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:24",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
@@ -16,8 +16,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"redhat.vscode-yaml",
-				"humanitec.humanitec"
+				"redhat.vscode-yaml"
 			],
 			"settings": {
 				"yaml.schemas": {
