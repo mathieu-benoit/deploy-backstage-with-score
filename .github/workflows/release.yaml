@@ -9,67 +9,34 @@ on:
       - 'v*'
 env:
   IMAGE_TAG: ${{ github.ref_name }}
-  MONOLITH_IMAGE_NAME: backstage
   FRONTEND_IMAGE_NAME: backstage-frontend
   BACKEND_IMAGE_NAME: backstage-backend
 jobs:
-  build-push-monolith-dev:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v6
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: login to ghcr
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login \
-              ghcr.io \
-              -u $ \
-              --password-stdin
-      - name: build and push monolith container image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          file: Dockerfile
-          push: true
-          provenance: mode=max
-          sbom: true
-          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-dev,ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:dev"
   build-push-monolith:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v6
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: login to ghcr
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login \
-              ghcr.io \
-              -u $ \
-              --password-stdin
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-      - name: remove better-sqlite3
-        run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
-          make remove-better-sqlite3
-      - name: build and push monolith container image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          file: Dockerfile
-          push: true
-          provenance: mode=max
-          sbom: true
-          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.MONOLITH_IMAGE_NAME }}:latest"
+    uses: docker/github-builder/.github/workflows/build.yml@v1
+    permissions:
+      contents: read # to fetch the repository content
+      id-token: write # to sign attestation(s) with GitHub OIDC Token
+      packages: write # to push container image to ghcr
+    with:
+      output: image
+      push: true
+      platforms: linux/amd64,linux/arm64
+      file: Dockerfile
+      sbom: true
+      context: .
+      set-meta-labels: true
+      set-meta-annotations: true
+      meta-images: |
+        ghcr.io/${{ github.repository_owner }}/backstage
+      meta-tags: |
+        type=ref,event=tag
+        latest
+    secrets:
+      registry-auths: |
+        - registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
   build-push-frontend:
     runs-on: ubuntu-24.04
     steps:
@@ -102,38 +69,6 @@ jobs:
           provenance: mode=max
           sbom: true
           tags: "ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE_NAME }}:latest"
-  build-push-backend-dev:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v6
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: login to ghcr
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login \
-              ghcr.io \
-              -u $ \
-              --password-stdin
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-      - name: remove frontend from backend
-        run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
-          make remove-frontend-from-backend
-      - name: build and push backend container image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          file: Dockerfile
-          push: true
-          provenance: mode=max
-          sbom: true
-          tags: "ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-dev,ghcr.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE_NAME }}:dev"
   build-push-backend:
     runs-on: ubuntu-24.04
     steps:
