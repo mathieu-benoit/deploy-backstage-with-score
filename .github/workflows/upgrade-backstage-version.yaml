@@ -1,8 +1,4 @@
 name: Upgrade Backstage version
-permissions:
-  contents: write
-  id-token: write
-  pull-requests: write
 on:
   schedule:
     - cron: "0 10 * * 1-5"
@@ -10,6 +6,10 @@ on:
 jobs:
   upgrade-backstage-version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
         with:
