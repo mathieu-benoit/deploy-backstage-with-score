@@ -43,6 +43,8 @@ jobs:
       output: image
       push: true
       platforms: linux/amd64,linux/arm64
+      runner: amd64
+      setup-qemu: true
       file: Dockerfile.frontend
       sbom: true
       context: .
