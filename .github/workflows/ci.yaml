@@ -1,7 +1,4 @@
 name: ci
-permissions:
-  contents: read
-  pull-requests: write
 on:
   pull_request:
     branches: [main]
@@ -15,6 +12,9 @@ on:
 jobs:
   scan-and-compare:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: checkout code
@@ -114,6 +114,8 @@ jobs:
         type=ref,event=pr
   build-and-test-monolith:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: checkout code
         uses: actions/checkout@v6
@@ -147,6 +149,8 @@ jobs:
           make k8s-monolith-test
   build-and-test-split:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: checkout code
         uses: actions/checkout@v6
