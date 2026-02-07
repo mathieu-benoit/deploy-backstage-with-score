@@ -61,7 +61,6 @@ RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 
 # From here on we use the least-privileged `node` user to run the backend.
 RUN addgroup -S node && adduser -S node -G node
-USER node
 
 # This should create the app dir as `node`.
 # If it is instead created as `root` then the `tar` command below will
@@ -92,10 +91,19 @@ COPY --chown=node:node app-config*.yaml ./
 # This will include the examples, if you don't need these simply remove this line
 COPY --chown=node:node examples ./examples
 
+# Set up a virtual environment for mkdocs-techdocs-core.
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN pip3 install mkdocs-techdocs-core==1.6.1
+
 # This switches many Node.js dependencies to production mode.
 ENV NODE_ENV=production
 
 # This disables node snapshot for Node 20 to work with the Scaffolder
 ENV NODE_OPTIONS="--no-node-snapshot"
+
+USER node
 
 CMD ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]

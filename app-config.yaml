@@ -58,9 +58,12 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: 'local' # Alternatives - 'docker'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    local:
+      # (Optional). Set this to specify where the generated documentation is stored.
+      publishDirectory: '/tmp/docs'
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
@@ -93,6 +96,10 @@ catalog:
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
+    
+    # Local example tech doc
+    - type: file
+      target: ../../examples/sample-doc.yaml
 
     ## Uncomment these lines to add more example data
     # - type: url

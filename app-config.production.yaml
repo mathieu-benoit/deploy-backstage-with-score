@@ -58,3 +58,7 @@ catalog:
       target: ./examples/org.yaml
       rules:
         - allow: [User, Group]
+    
+    # Tech doc
+    - type: file
+      target: ./examples/sample-doc.yaml
