@@ -87,6 +87,7 @@ jobs:
       runner: amd64
       setup-qemu: true
       sbom: true
+      cache: true
       context: .
       file: Dockerfile.frontend
       set-meta-labels: true
@@ -104,6 +105,7 @@ jobs:
       push: false
       platforms: linux/amd64,linux/arm64
       sbom: true
+      cache: true
       context: .
       file: Dockerfile
       set-meta-labels: true
