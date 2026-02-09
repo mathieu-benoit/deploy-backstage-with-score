@@ -9,11 +9,12 @@ on:
       - ready_for_review
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   scan-and-compare:
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
       pull-requests: write
     if: ${{ github.event_name == 'pull_request' }}
     steps:
@@ -78,8 +79,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
   multi-arch-build-frontend-container:
     uses: docker/github-builder/.github/workflows/build.yml@v1
-    permissions:
-      contents: read # to fetch the repository content
     with:
       output: image
       push: false
@@ -98,8 +97,6 @@ jobs:
         type=ref,event=pr
   multi-arch-build-backend-container:
     uses: docker/github-builder/.github/workflows/build.yml@v1
-    permissions:
-      contents: read # to fetch the repository content
     with:
       output: image
       push: false
@@ -116,8 +113,6 @@ jobs:
         type=ref,event=pr
   build-and-test-monolith:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: checkout code
         uses: actions/checkout@v6
@@ -151,8 +146,6 @@ jobs:
           make k8s-monolith-test
   build-and-test-split:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: checkout code
         uses: actions/checkout@v6
