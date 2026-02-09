@@ -3,6 +3,8 @@ on:
   push:
     tags:        
       - 'v*'
+permissions:
+  contents: read # to fetch the repository content
 env:
   IMAGE_TAG: ${{ github.ref_name }}
   FRONTEND_IMAGE_NAME: backstage-frontend
@@ -11,7 +13,6 @@ jobs:
   build-push-monolith:
     uses: docker/github-builder/.github/workflows/build.yml@v1
     permissions:
-      contents: read # to fetch the repository content
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
     with:
@@ -36,7 +37,6 @@ jobs:
   build-push-frontend:
     uses: docker/github-builder/.github/workflows/build.yml@v1
     permissions:
-      contents: read # to fetch the repository content
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
     with:
@@ -63,7 +63,6 @@ jobs:
   build-push-backend:
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
       id-token: write
       packages: write
     steps:
