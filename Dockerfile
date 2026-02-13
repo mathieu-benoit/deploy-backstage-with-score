@@ -1,6 +1,6 @@
 # Taken from https://backstage.io/docs/deployment/docker/#multi-stage-build
 # Stage 1 - Create yarn install skeleton layer
-FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-dev AS packages
+FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-sfw-dev AS packages
 
 WORKDIR /app
 COPY backstage.json package.json yarn.lock ./
@@ -15,7 +15,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2 - Install dependencies and build packages
-FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-dev AS build
+FROM --platform=$BUILDPLATFORM dhi.io/node:24-alpine3.23-sfw-dev AS build
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
@@ -47,7 +47,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3 - Build the actual backend image and install production dependencies
-FROM dhi.io/node:24-alpine3.23-dev
+FROM dhi.io/node:24-alpine3.23-sfw-dev
 
 # Set Python interpreter for `node-gyp` to use
 ENV PYTHON=/usr/bin/python3
