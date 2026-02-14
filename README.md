@@ -1,4 +1,6 @@
-This [Backstage](https://backstage.io) application is used as part of this blog post [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
+This [Backstage](https://backstage.io) application is used as part of these blog posts:
+- [Deploy Backstage with Score, from local to Kubernetes](https://medium.com/@mabenoit/deploy-backstage-with-score-45bb2d7c2d90).
+- [Docker Hardened Images (DHI) for your Backstage app: go distroless and get more!](https://itnext.io/go-distroless-with-your-backstage-app-with-docker-hardened-images-dhi-b61539ffbf00)
 
 You can deploy this Backstage application in different ways:
 - [With `yarn`](#with-yarn)
