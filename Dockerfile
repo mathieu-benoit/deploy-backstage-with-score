@@ -11,8 +11,8 @@ RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {
 # Stage 2: build the packages
 FROM --platform=$BUILDPLATFORM dhi.io/node:24.13.1-alpine3.23-sfw-dev@sha256:57af8405bdcd14b746cb7f6c9a8edfacfa38e0504d1d6a87fe5da08aeeaeac44 AS build-packages
 ENV PYTHON=/usr/bin/python3
-RUN apk add --no-cache g++ make python3 sqlite-dev && \
-    rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache g++ make python3 sqlite-dev && rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 WORKDIR /app
 COPY --from=packages --chown=node:node /app .
 RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
@@ -27,8 +27,8 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
 # Stage 3: build the application
 FROM --platform=$BUILDPLATFORM dhi.io/node:24.13.1-alpine3.23-sfw-dev@sha256:57af8405bdcd14b746cb7f6c9a8edfacfa38e0504d1d6a87fe5da08aeeaeac44 AS build-app
 ENV PYTHON=/usr/bin/python3
-RUN apk add --no-cache g++ make python3 sqlite-dev && \
-    rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache g++ make python3 && rm -rf /var/lib/apk/lists/*
+RUN apk add --no-cache sqlite-dev && rm -rf /var/lib/apk/lists/*
 WORKDIR /app
 COPY --from=build-packages --chown=node:node /app/.yarn ./.yarn
 COPY --from=build-packages --chown=node:node /app/.yarnrc.yml  ./
