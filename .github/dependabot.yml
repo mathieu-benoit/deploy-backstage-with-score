@@ -1,4 +1,10 @@
 version: 2
+registries:
+  dhi:
+    type: docker-registry
+    url: docker.io
+    username: ${{ secrets.DOCKER_USER }}
+    password: ${{ secrets.DOCKER_PAT }}
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -27,6 +33,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    registries:
+    - dhi
     ignore:
       - dependency-name: 'node'
         update-types: ['version-update:semver-major']
