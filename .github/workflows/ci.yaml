@@ -101,27 +101,27 @@ jobs:
         frontend
       meta-tags: |
         type=ref,event=pr
-  multi-arch-build-backend-container:
-    uses: docker/github-builder/.github/workflows/build.yml@v1
-    with:
-      output: image
-      push: false
-      platforms: linux/amd64,linux/arm64
-      sbom: true
-      cache: true
-      context: .
-      file: Dockerfile
-      set-meta-labels: true
-      set-meta-annotations: true
-      meta-images: |
-        backend
-      meta-tags: |
-        type=ref,event=pr
-    secrets:
-      registry-auths: |
-        - registry: docker.io
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PAT }}
+  #multi-arch-build-backend-container:
+  #  uses: docker/github-builder/.github/workflows/build.yml@v1
+  #  with:
+  #    output: image
+  #    push: false
+  #    platforms: linux/amd64,linux/arm64
+  #    sbom: true
+  #    cache: true
+  #    context: .
+  #    file: Dockerfile
+  #    set-meta-labels: true
+  #    set-meta-annotations: true
+  #    meta-images: |
+  #      backend
+  #    meta-tags: |
+  #      type=ref,event=pr
+  #  secrets:
+  #    registry-auths: |
+  #      - registry: docker.io
+  #        username: ${{ secrets.DOCKER_USER }}
+  #        password: ${{ secrets.DOCKER_PAT }}
   build-and-test-monolith:
     runs-on: ubuntu-latest
     steps:
