@@ -97,10 +97,6 @@ jobs:
         run: |
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           make remove-frontend-from-backend
-      - name: remove better-sqlite3
-        run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
-          make remove-better-sqlite3
       - name: build and push backend container image
         uses: docker/build-push-action@v6
         with:
