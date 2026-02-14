@@ -2,7 +2,7 @@ version: 2
 registries:
   hub:
     type: docker-registry
-    url: docker.io
+    url: registry.hub.docker.com
     username: ${{ secrets.DOCKER_USER }}
     password: ${{ secrets.DOCKER_PAT }}
   dhi:
