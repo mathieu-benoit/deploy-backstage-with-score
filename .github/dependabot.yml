@@ -5,11 +5,6 @@ registries:
     url: registry.hub.docker.com
     username: ${{ secrets.DOCKER_USER }}
     password: ${{ secrets.DOCKER_PAT }}
-  dhi:
-    type: docker-registry
-    url: dhi.io
-    username: ${{ secrets.DOCKER_USER }}
-    password: ${{ secrets.DOCKER_PAT }}
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -39,7 +34,6 @@ updates:
     schedule:
       interval: "weekly"
     registries:
-    - dhi
     - hub
     ignore:
       - dependency-name: 'node'
