@@ -59,7 +59,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.base_ref }}
       - name: Build container image from main branch
         uses: docker/build-push-action@v6
         with:
