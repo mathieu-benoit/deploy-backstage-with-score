@@ -1,5 +1,5 @@
 # Stage 1: prepare packages
-FROM --platform=$BUILDPLATFORM dhi.io/node:24.13.1-alpine3.23-sfw-dev@sha256:57af8405bdcd14b746cb7f6c9a8edfacfa38e0504d1d6a87fe5da08aeeaeac44 AS packages
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24.13.1-alpine3.23-sfw-dev_backstage@sha256:e1615375b9a751ca68bd6fa84c21f69921e88281a03dd0ffd8373593857dbf4f AS packages
 WORKDIR /app
 COPY backstage.json package.json yarn.lock ./
 COPY .yarn ./.yarn
@@ -9,7 +9,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2: build the packages
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24.13.1-alpine3.23-sfw-dev_backstage AS build-packages
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24.13.1-alpine3.23-sfw-dev_backstage@sha256:e1615375b9a751ca68bd6fa84c21f69921e88281a03dd0ffd8373593857dbf4f AS build-packages
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=packages --chown=node:node /app .
@@ -23,7 +23,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3: build the application
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24.13.1-alpine3.23-sfw-dev_backstage AS build-app
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24.13.1-alpine3.23-sfw-dev_backstage@sha256:e1615375b9a751ca68bd6fa84c21f69921e88281a03dd0ffd8373593857dbf4f AS build-app
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=build-packages --chown=node:node /app/.yarn ./.yarn
