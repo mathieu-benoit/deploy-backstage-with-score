@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid
     yarn workspaces focus --all --production && rm -rf "$(yarn cache clean)"
 
 # Final Stage: create the runtime image
-FROM demonstrationorg/dhi-node:24.13.1-debian13_backstage2
+FROM demonstrationorg/dhi-node:24.13.1-debian13_backstage
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=build-packages --chown=node:node /app/packages/backend/dist/bundle/ ./
