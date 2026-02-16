@@ -14,7 +14,7 @@ ENV PYTHON=/usr/bin/python3
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
-    apt-get install -y --no-install-recommends python3 g++ build-essential libsqlite3-dev && \
+    apt-get install -y --no-install-recommends python3 g++ build-essential libsqlite3-dev gzip && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=packages --chown=node:node /app .
