@@ -238,7 +238,7 @@ k8s-split-manifests: score-backend.yaml score-frontend.yaml k8s-split-state Make
 		--image ${FRONTEND_CONTAINER_IMAGE} \
 		--override-property containers.${FRONTEND_CONTAINER_NAME}.variables.APP_CONFIG_app_title="Hello, Kubernetes!"
 	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem = false' manifests.yaml
-	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.securityContext.runAsUser = 101' manifests.yaml
+	yq e -i 'select(.kind == "Deployment" and .metadata.name == "frontend").spec.template.spec.securityContext.runAsUser = 65532' manifests.yaml
 
 ## Generate a manifests.yaml file from the score spec, deploy it to Kubernetes and wait for the Pods to be Ready.
 .PHONY: k8s-split-up
