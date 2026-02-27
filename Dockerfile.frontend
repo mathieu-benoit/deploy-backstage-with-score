@@ -4,8 +4,8 @@ WORKDIR /app
 RUN yarn install
 RUN yarn workspace app build
 
-FROM nginxinc/nginx-unprivileged:1.29.5-alpine-slim@sha256:e3b2c32a4813281c371ca8480d101c68102170261dbeee80d661cce32e1e51fa
-ARG UID=101
+FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev
+ARG UID=65532
 USER root
 RUN apk add --no-cache jq && rm -rf /var/lib/apk/lists/*
 COPY --from=build /app/packages/app/dist /usr/share/nginx/html
