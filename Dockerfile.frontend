@@ -1,5 +1,4 @@
 FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev@sha256:e902344a6de4bc2f1df964eb059a3ea1881afe1e8253a8372e599a26fe980f6b AS build
-RUN mkdir /app
 COPY . /app
 WORKDIR /app
 RUN yarn install
