@@ -1,7 +1,0 @@
-name: backstagedhictl
-source: dhi/node
-tag_definition_id: node/alpine-3.23/24
-destination: demonstrationorg/dhi-node
-platforms:
-  - linux/arm64
-  - linux/amd64
