@@ -190,7 +190,7 @@ jobs:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-monolith-test
+      - name: make k8s-split-test
         run: |
           make kind-create-cluster
           make kind-load-split-images
