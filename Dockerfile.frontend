@@ -1,16 +1,14 @@
-FROM --platform=$BUILDPLATFORM node:24-alpine@sha256:7fddd9ddeae8196abf4a3ef2de34e11f7b1a722119f91f28ddf1e99dcafdf114 AS build
-RUN mkdir /app
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev@sha256:e902344a6de4bc2f1df964eb059a3ea1881afe1e8253a8372e599a26fe980f6b AS build
 COPY . /app
 WORKDIR /app
 RUN yarn install
 RUN yarn workspace app build
 
-FROM nginxinc/nginx-unprivileged:1.29.5-alpine-slim@sha256:e3b2c32a4813281c371ca8480d101c68102170261dbeee80d661cce32e1e51fa
-ARG UID=101
+FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev_backstage@sha256:c88cc05787e2185409d16b46b495dc61c4d4ff0be11c490d34bd3cfc1c933e72
+ARG UID=nginx
 USER root
-RUN apk add --no-cache jq && rm -rf /var/lib/apk/lists/*
-COPY --from=build /app/packages/app/dist /usr/share/nginx/html
-RUN chown -R $UID:0 /usr/share/nginx/html/
+COPY --from=build --chown=nginx:nginx /app/packages/app/dist /usr/share/nginx/html
+RUN chown -R $UID:$UID /usr/share/nginx/html/
 RUN chmod -R g+w /usr/share/nginx/html/
 COPY container-config/default.conf.template /etc/nginx/templates/default.conf.template
 COPY container-config/inject-config.sh /docker-entrypoint.d/40-inject-config.sh

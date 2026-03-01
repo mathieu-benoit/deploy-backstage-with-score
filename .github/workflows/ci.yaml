@@ -76,24 +76,24 @@ jobs:
           to: local://backstage:main
           write-comment: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  multi-arch-build-frontend-container:
-    uses: docker/github-builder/.github/workflows/build.yml@abff7868c866c54704b6afa9ad5871948ca97334 # v1.1.0
-    with:
-      output: image
-      push: false
-      platforms: linux/amd64,linux/arm64
-      runner: amd64
-      setup-qemu: true
-      sbom: true
-      cache: true
-      context: .
-      file: Dockerfile.frontend
-      set-meta-labels: true
-      set-meta-annotations: true
-      meta-images: |
-        frontend
-      meta-tags: |
-        type=ref,event=pr
+  #multi-arch-build-frontend-container:
+  #  uses: docker/github-builder/.github/workflows/build.yml@abff7868c866c54704b6afa9ad5871948ca97334 # v1.1.0
+  #  with:
+  #    output: image
+  #    push: false
+  #    platforms: linux/amd64,linux/arm64
+  #    runner: amd64
+  #    setup-qemu: true
+  #    sbom: true
+  #    cache: true
+  #    context: .
+  #    file: Dockerfile.frontend
+  #    set-meta-labels: true
+  #    set-meta-annotations: true
+  #    meta-images: |
+  #      frontend
+  #    meta-tags: |
+  #      type=ref,event=pr
   #multi-arch-build-backend-container:
   #  uses: docker/github-builder/.github/workflows/build.yml@abff7868c866c54704b6afa9ad5871948ca97334 # v1.1.0
   #  with:
@@ -190,7 +190,7 @@ jobs:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest"
-      - name: make k8s-monolith-test
+      - name: make k8s-split-test
         run: |
           make kind-create-cluster
           make kind-load-split-images
