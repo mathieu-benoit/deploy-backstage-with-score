@@ -34,9 +34,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
         - username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
-        - registry: dhi.io
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PAT }}
   build-push-frontend:
     uses: docker/github-builder/.github/workflows/build.yml@abff7868c866c54704b6afa9ad5871948ca97334 # v1.1.0
     permissions:
@@ -63,6 +60,8 @@ jobs:
         - registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+        - username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
   build-push-backend:
     runs-on: ubuntu-24.04
     permissions:
