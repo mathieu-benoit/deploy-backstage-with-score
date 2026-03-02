@@ -36,7 +36,7 @@ updates:
     registries:
     - hub
     ignore:
-      - dependency-name: 'node'
+      - dependency-name: 'dhi-node'
         update-types: ['version-update:semver-major']
     groups:
       ci:
