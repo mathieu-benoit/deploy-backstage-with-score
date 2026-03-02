@@ -123,6 +123,6 @@ jobs:
           summary: true
           image: registry://ghcr.io/${{ github.repository_owner }}/backstage:${{ github.ref_name }}
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@c793b717bc78562f491db7b0e93a3a178b099162 # v4.32.5
         with:
           sarif_file: sarif.output.json
