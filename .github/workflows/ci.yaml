@@ -75,6 +75,7 @@ jobs:
           image: local://backstage:pr-${{ github.event.number }}
           to: local://backstage:main
           write-comment: true
+          keep-previous-comments: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
   scan-and-compare-frontend:
     runs-on: ubuntu-24.04
@@ -112,6 +113,7 @@ jobs:
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
+          file: Dockerfile.frontend
           push: false
           load: true
           cache-from: type=gha
@@ -126,6 +128,13 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.base_ref }}
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: '24'
+      - name: remove frontend from backend
+        run: |
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          make remove-frontend-from-backend
       - name: Build container image from main branch
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
@@ -148,6 +157,7 @@ jobs:
           image: local://frontend:pr-${{ github.event.number }}
           to: local://frontend:main
           write-comment: true
+          keep-previous-comments: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
   #multi-arch-build-frontend-container:
   #  uses: docker/github-builder/.github/workflows/build.yml@abff7868c866c54704b6afa9ad5871948ca97334 # v1.1.0
