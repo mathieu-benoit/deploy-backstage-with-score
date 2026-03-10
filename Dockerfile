@@ -1,5 +1,5 @@
 # Stage 1: prepare packages
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:d98a8985ae0c5c43958cf495d45f1f0b2ac7bc54d48a0b0e240d2e772e24c8b7 AS packages
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:67ec7a8ab48c7cc1778f2b9d36b5f9f8b220778d3fd24c0d92055cc4dffcb0d3 AS packages
 WORKDIR /app
 COPY backstage.json package.json yarn.lock ./
 COPY .yarn ./.yarn
@@ -9,7 +9,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2: build the packages
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:d98a8985ae0c5c43958cf495d45f1f0b2ac7bc54d48a0b0e240d2e772e24c8b7 AS build-packages
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:67ec7a8ab48c7cc1778f2b9d36b5f9f8b220778d3fd24c0d92055cc4dffcb0d3 AS build-packages
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=packages --chown=node:node /app .
@@ -23,7 +23,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3: build the application
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:d98a8985ae0c5c43958cf495d45f1f0b2ac7bc54d48a0b0e240d2e772e24c8b7 AS build-app
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev_backstage@sha256:67ec7a8ab48c7cc1778f2b9d36b5f9f8b220778d3fd24c0d92055cc4dffcb0d3 AS build-app
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=build-packages --chown=node:node /app/.yarn ./.yarn
@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid
     yarn workspaces focus --all --production && rm -rf "$(yarn cache clean)"
 
 # Final Stage: create the runtime image
-FROM demonstrationorg/dhi-node:24-alpine3.23_backstage2@sha256:c20431f7cb9d21d3e3f8d04ed1f08a64ac0be4305bbb459db66dd7f05916547a
+FROM demonstrationorg/dhi-node:24-alpine3.23_backstage@sha256:fb53c36dbc891459e0f430db9cd9193035a5d815b64a0f7236153e60f4c102b8
 ENV PYTHON=/opt/python/bin/python3
 WORKDIR /app
 COPY --from=build-packages --chown=node:node /app/packages/backend/dist/bundle/ ./
