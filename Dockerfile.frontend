@@ -4,7 +4,7 @@ WORKDIR /app
 RUN yarn install
 RUN yarn workspace app build
 
-FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev_backstage@sha256:c88cc05787e2185409d16b46b495dc61c4d4ff0be11c490d34bd3cfc1c933e72
+FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev_backstage@sha256:5cdb5fcc53caf87d97f4c9c42c333d2399cce72bf62d759e9e00aed2c67b6d00
 ARG UID=nginx
 USER root
 COPY --from=build --chown=nginx:nginx /app/packages/app/dist /usr/share/nginx/html
