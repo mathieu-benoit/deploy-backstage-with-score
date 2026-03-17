@@ -1,5 +1,11 @@
-import { render, waitFor } from '@testing-library/react';
-import App from './App';
+import { renderWithEffects } from '@backstage/test-utils';
+import { createApp } from '@backstage/frontend-defaults';
+import {
+  convertLegacyAppRoot,
+  convertLegacyAppOptions,
+} from '@backstage/core-compat-api';
+import { apis } from './apis';
+import { routes } from './App';
 
 describe('App', () => {
   it('should render', async () => {
@@ -19,10 +25,15 @@ describe('App', () => {
       ] as any,
     };
 
-    const rendered = render(<App />);
-
-    await waitFor(() => {
-      expect(rendered.baseElement).toBeInTheDocument();
+    const app = createApp({
+      features: [
+        convertLegacyAppOptions({ apis }),
+        ...convertLegacyAppRoot(routes),
+      ],
     });
+
+    const { baseElement } = await renderWithEffects(app.createRoot());
+
+    expect(baseElement).toBeInTheDocument();
   });
 });
