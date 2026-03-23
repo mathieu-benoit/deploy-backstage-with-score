@@ -7,7 +7,7 @@ permissions:
   contents: read # to fetch the repository content
 jobs:
   build-push-monolith:
-    uses: docker/github-builder/.github/workflows/build.yml@61b16ec4d881c8bdebcb8ed369c81c20187975ba # v1.3.0
+    uses: docker/github-builder/.github/workflows/build.yml@70313223e2665c3211b454b3fea6534624e78d64 # v1.4.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -35,7 +35,7 @@ jobs:
         - username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
   build-push-frontend:
-    uses: docker/github-builder/.github/workflows/build.yml@61b16ec4d881c8bdebcb8ed369c81c20187975ba # v1.3.0
+    uses: docker/github-builder/.github/workflows/build.yml@70313223e2665c3211b454b3fea6534624e78d64 # v1.4.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -116,13 +116,13 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
       - name: Docker Scout
         id: docker-scout
-        uses: docker/scout-action@1128f02d1e60f339af7306e0e62b9fdc13d9fab9 # v1.20.2
+        uses: docker/scout-action@8910519cee8ac046f3ee99686b0dc6654d5ba1a7 # v1.20.3
         with:
           command: cves
           sarif-file: sarif.output.json
           summary: true
           image: registry://ghcr.io/${{ github.repository_owner }}/backstage:${{ github.ref_name }}
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
+        uses: github/codeql-action/upload-sarif@38697555549f1db7851b81482ff19f1fa5c4fedc # v4.34.1
         with:
           sarif_file: sarif.output.json

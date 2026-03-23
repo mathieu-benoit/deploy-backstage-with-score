@@ -69,7 +69,7 @@ jobs:
         run: |
           docker images
       - name: Docker Scout
-        uses: docker/scout-action@1128f02d1e60f339af7306e0e62b9fdc13d9fab9 # v1.20.2
+        uses: docker/scout-action@8910519cee8ac046f3ee99686b0dc6654d5ba1a7 # v1.20.3
         with:
           command: compare
           image: local://backstage:pr-${{ github.event.number }}
@@ -151,7 +151,7 @@ jobs:
         run: |
           docker images
       - name: Docker Scout
-        uses: docker/scout-action@1128f02d1e60f339af7306e0e62b9fdc13d9fab9 # v1.20.2
+        uses: docker/scout-action@8910519cee8ac046f3ee99686b0dc6654d5ba1a7 # v1.20.3
         with:
           command: compare
           image: local://frontend:pr-${{ github.event.number }}
@@ -212,7 +212,7 @@ jobs:
           yarn install
           git diff --exit-code
       - name: install score-compose
-        uses: score-spec/setup-score@78de9126e3f298fe8b799b6afb7b0b67bfe0d1e3 # v3.2.0
+        uses: score-spec/setup-score@200eb5eef7076b4d72da20bef38e80a49af6b7b6 # v3.2.1
         with:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -226,7 +226,7 @@ jobs:
         run: |
           make compose-monolith-test
       - name: install score-k8s
-        uses: score-spec/setup-score@78de9126e3f298fe8b799b6afb7b0b67bfe0d1e3 # v3.2.0
+        uses: score-spec/setup-score@200eb5eef7076b4d72da20bef38e80a49af6b7b6 # v3.2.1
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -254,7 +254,7 @@ jobs:
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           make remove-frontend-from-backend
       - name: install score-compose
-        uses: score-spec/setup-score@78de9126e3f298fe8b799b6afb7b0b67bfe0d1e3 # v3.2.0
+        uses: score-spec/setup-score@200eb5eef7076b4d72da20bef38e80a49af6b7b6 # v3.2.1
         with:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -268,7 +268,7 @@ jobs:
         run: |
           make compose-split-test
       - name: install score-k8s
-        uses: score-spec/setup-score@78de9126e3f298fe8b799b6afb7b0b67bfe0d1e3 # v3.2.0
+        uses: score-spec/setup-score@200eb5eef7076b4d72da20bef38e80a49af6b7b6 # v3.2.1
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
