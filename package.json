@@ -32,13 +32,13 @@
     "@backstage/cli": "^0.36.1",
     "@backstage/e2e-test-utils": "^0.1.2",
     "@jest/environment-jsdom-abstract": "^30.3.0",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.59.1",
     "@types/jest": "^30.0.0",
     "jest": "^30.3.0",
-    "jsdom": "^29.0.0",
-    "node-gyp": "^12.2.0",
-    "prettier": "^3.8.1",
-    "typescript": "~5.9.3"
+    "jsdom": "^29.0.2",
+    "node-gyp": "^12.3.0",
+    "prettier": "^3.8.3",
+    "typescript": "~6.0.3"
   },
   "resolutions": {
     "@types/react": "^18",
