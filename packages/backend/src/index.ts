@@ -66,4 +66,7 @@ backend.add(import('@backstage/plugin-signals-backend'));
 // tech radar plugin
 backend.add(import('@backstage-community/plugin-tech-radar-backend'));
 
+// mcp actions plugin
+backend.add(import('@backstage/plugin-mcp-actions-backend'));
+
 backend.start();
