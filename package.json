@@ -67,7 +67,10 @@
     "underscore": ">=1.13.8",
     "@tootallnate/once": ">=3.0.1",
     "file-type": ">=21.3.2",
-    "dompurify": ">=3.3.2"
+    "dompurify": ">=3.3.2",
+    "flatted": ">=3.4.2",
+    "express/path-to-regexp": "0.1.13",
+    "path-to-regexp": ">=0.1.13"
   },
   "prettier": "@backstage/cli/config/prettier",
   "lint-staged": {
