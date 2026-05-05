@@ -212,7 +212,7 @@ jobs:
           yarn install
           git diff --exit-code
       - name: install score-compose
-        uses: score-spec/setup-score@8dce39f07e47ddee44ad7f6699675e12e484ef46 # v3.2.2
+        uses: score-spec/setup-score@1db79668fdd7b3e68ca5d5a734aad29ea75901cd # v3.2.3
         with:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -226,7 +226,7 @@ jobs:
         run: |
           make compose-monolith-test
       - name: install score-k8s
-        uses: score-spec/setup-score@8dce39f07e47ddee44ad7f6699675e12e484ef46 # v3.2.2
+        uses: score-spec/setup-score@1db79668fdd7b3e68ca5d5a734aad29ea75901cd # v3.2.3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -254,7 +254,7 @@ jobs:
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           make remove-frontend-from-backend
       - name: install score-compose
-        uses: score-spec/setup-score@8dce39f07e47ddee44ad7f6699675e12e484ef46 # v3.2.2
+        uses: score-spec/setup-score@1db79668fdd7b3e68ca5d5a734aad29ea75901cd # v3.2.3
         with:
           file: score-compose
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -268,7 +268,7 @@ jobs:
         run: |
           make compose-split-test
       - name: install score-k8s
-        uses: score-spec/setup-score@8dce39f07e47ddee44ad7f6699675e12e484ef46 # v3.2.2
+        uses: score-spec/setup-score@1db79668fdd7b3e68ca5d5a734aad29ea75901cd # v3.2.3
         with:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
