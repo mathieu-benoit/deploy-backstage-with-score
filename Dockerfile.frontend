@@ -1,10 +1,10 @@
-FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev@sha256:145b5a358524b76902183ec2e1a4338179c11b07f69aa0ee08bc0dd7e0f0e172 AS build
+FROM --platform=$BUILDPLATFORM demonstrationorg/dhi-node:24-alpine3.23-sfw-dev@sha256:981cb82ff1c6398ef99a46f3f62b332ebaf687b380f60da7903fbbd1c4ebf4c0 AS build
 COPY . /app
 WORKDIR /app
 RUN yarn install
 RUN yarn workspace app build
 
-FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev_backstage@sha256:d51df9fb46bab20e6052fe889621e5c36935210eb99d0bad53d4152541d453a2
+FROM demonstrationorg/dhi-nginx:1.29-alpine3.23-dev_backstage@sha256:a95f28f4530236c5ef78f7fdffb4689f557e91f4609b7442ff8b9d14719fb3f5
 ARG UID=nginx
 USER root
 COPY --from=build --chown=nginx:nginx /app/packages/app/dist /usr/share/nginx/html
