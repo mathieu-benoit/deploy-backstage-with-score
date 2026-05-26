@@ -7,7 +7,7 @@ permissions:
   contents: read # to fetch the repository content
 jobs:
   build-push-monolith:
-    uses: docker/github-builder/.github/workflows/build.yml@c2782c55efa56a01b9c30021db8f5ec3993228a3 # v1.8.0
+    uses: docker/github-builder/.github/workflows/build.yml@073833262a23a17675c95c4541ab063b7646756b # v1.9.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -35,7 +35,7 @@ jobs:
         - username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
   build-push-frontend:
-    uses: docker/github-builder/.github/workflows/build.yml@c2782c55efa56a01b9c30021db8f5ec3993228a3 # v1.8.0
+    uses: docker/github-builder/.github/workflows/build.yml@073833262a23a17675c95c4541ab063b7646756b # v1.9.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -73,15 +73,15 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
       - name: docker login ghcr.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: docker login docker.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
@@ -93,7 +93,7 @@ jobs:
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           make remove-frontend-from-backend
       - name: build and push backend container image
-        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -110,19 +110,19 @@ jobs:
       - build-push-monolith
     steps:
       - name: docker login docker.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
       - name: Docker Scout
         id: docker-scout
-        uses: docker/scout-action@bacf462e8d090c09660de30a6ccc718035f961e3 # v1.20.4
+        uses: docker/scout-action@cd72f264beff1cd72735de31148b9d3244a0234a # v1.21.0
         with:
           command: cves
           sarif-file: sarif.output.json
           summary: true
           image: registry://ghcr.io/${{ github.repository_owner }}/backstage:${{ github.ref_name }}
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
+        uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
         with:
           sarif_file: sarif.output.json
