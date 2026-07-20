@@ -7,7 +7,7 @@ permissions:
   contents: read # to fetch the repository content
 jobs:
   build-push-monolith:
-    uses: docker/github-builder/.github/workflows/build.yml@5f637c833aa76bc99372a1dc9a6f8bcd8056fb85 # v1.12.0
+    uses: docker/github-builder/.github/workflows/build.yml@3415a188caae9a0da7fba83bc06985776e0b1790 # v1.14.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -35,7 +35,7 @@ jobs:
         - username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
   build-push-frontend:
-    uses: docker/github-builder/.github/workflows/build.yml@5f637c833aa76bc99372a1dc9a6f8bcd8056fb85 # v1.12.0
+    uses: docker/github-builder/.github/workflows/build.yml@3415a188caae9a0da7fba83bc06985776e0b1790 # v1.14.0
     permissions:
       id-token: write # to sign attestation(s) with GitHub OIDC Token
       packages: write # to push container image to ghcr
@@ -69,7 +69,7 @@ jobs:
       packages: write
     steps:
       - name: checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4.2.0
       - name: Set up Docker Buildx
@@ -85,7 +85,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PAT }}
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
       - name: remove frontend from backend
@@ -123,6 +123,6 @@ jobs:
           summary: true
           image: registry://ghcr.io/${{ github.repository_owner }}/backstage:${{ github.ref_name }}
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@54f647b7e1bb85c95cddabcd46b0c578ec92bc1a # v4.36.3
+        uses: github/codeql-action/upload-sarif@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
         with:
           sarif_file: sarif.output.json
